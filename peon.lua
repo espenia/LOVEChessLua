@@ -3,12 +3,14 @@ Peon = Object:extend()
 
 function Peon:new()
     self.image = love.graphics.newImage("assets/pawn-white.png")
-    self.widthScale = 0.5
-    self.heightScale = 0.5
+    self.gridSize = 100
+    self.widthScale = 0.3
+    self.heightScale = 0.3
     self.x = 300
     self.y = 20
     self.speed = 500
-    self.width = self.image:getWidth() 
+    self.width = self.image:getWidth() * self.widthScale
+    self.height = self.image:getHeight() * self.heightScale
     self.clicked = false
 end
 
@@ -24,24 +26,16 @@ end
 
 function Peon:draw()
     love.graphics.draw(self.image, self.x, self.y, 0, self.widthScale, self.heightScale)
-    love.graphics.setColor(1, 1, 1, 1)
-    love.graphics.print("Test.", 10, 200)
-    local x, y = love.mouse.getPosition()
-    love.graphics.print(x, 10, 100)
-    love.graphics.print(y, 10, 150)
-    if self.clicked == true then
-        love.graphics.print("down", 10, 250)
-    end
 end
 
 function Peon:isPressed()
     local delta = 50
     if love.mouse.isDown(1) then
         local x, y = love.mouse.getPosition()
-        if  (x > self.x - delta) and
-            (x < self.x + delta) and
-            (y > self.y - delta) and
-            (y < self.y + delta) then
+        if  (x > self.x + self.width / 2 - delta) and
+            (x < self.x + self.width / 2 + delta) and
+            (y > self.y + self.height / 2 - delta) and
+            (y < self.y + self.height / 2 + delta) then
             self.clicked = true
         end
     else
@@ -52,6 +46,8 @@ end
 function Peon:drag()
     if self.clicked then
         self.x, self.y = love.mouse.getPosition()
+        self.x = math.floor(self.x / self.gridSize) * self.gridSize
+        self.y = math.floor(self.y / self.gridSize) * self.gridSize
     end
 end
 
