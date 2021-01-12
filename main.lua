@@ -1,8 +1,10 @@
 function love.load()
     Object = require "classic"
+    require "piece"
     require "peon"
 
     peon = Peon()
+
 end
 
 function love.update(dt)

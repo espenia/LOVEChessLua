@@ -1,54 +1,9 @@
-Peon = Object:extend()
+Peon = Piece:extend()
 
 
 function Peon:new()
     self.image = love.graphics.newImage("assets/pawn-white.png")
-    self.gridSize = 100
-    self.widthScale = 0.3
-    self.heightScale = 0.3
-    self.x = 300
-    self.y = 20
-    self.speed = 500
-    self.width = self.image:getWidth() * self.widthScale
-    self.height = self.image:getHeight() * self.heightScale
-    self.clicked = false
-end
-
-function Peon:update(dt)
-    if love.keyboard.isDown("left") then
-        self.x = self.x - self.speed * dt
-    elseif love.keyboard.isDown("right") then
-        self.x = self.x + self.speed * dt
-    end
-    self:isPressed()
-    self:drag()
-end
-
-function Peon:draw()
-    love.graphics.draw(self.image, self.x, self.y, 0, self.widthScale, self.heightScale)
-end
-
-function Peon:isPressed()
-    local delta = 50
-    if love.mouse.isDown(1) then
-        local x, y = love.mouse.getPosition()
-        if  (x > self.x + self.width / 2 - delta) and
-            (x < self.x + self.width / 2 + delta) and
-            (y > self.y + self.height / 2 - delta) and
-            (y < self.y + self.height / 2 + delta) then
-            self.clicked = true
-        end
-    else
-        self.clicked = false
-    end
-end
-
-function Peon:drag()
-    if self.clicked then
-        self.x, self.y = love.mouse.getPosition()
-        self.x = math.floor(self.x / self.gridSize) * self.gridSize
-        self.y = math.floor(self.y / self.gridSize) * self.gridSize
-    end
+    self.super.new(self)
 end
 
 function Peon:color()
