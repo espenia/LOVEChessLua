@@ -1,16 +1,17 @@
 Piece = Object:extend()
 
 
-function Piece:new()
+function Piece:new(color, x, y)
     self.gridSize = 100
-    self.widthScale = 0.3
-    self.heightScale = 0.3
-    self.x = 300
-    self.y = 20
+    self.widthScale = 0.2
+    self.heightScale = 0.2
+    self.x = x
+    self.y = y
     self.speed = 500
     self.width = self.image:getWidth() * self.widthScale
     self.height = self.image:getHeight() * self.heightScale
     self.clicked = false
+    self.color = color
 end
 
 function Piece:update(dt)

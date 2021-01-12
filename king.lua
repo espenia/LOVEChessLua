@@ -1,9 +1,9 @@
 King = Piece:extend()
 
 
-function King:new()
+function King:new(color, x, y)
     self.image = love.graphics.newImage("assets/king-white.png")
-    self.super.new(self)
+    self.super.new(self, color, x, y)
 end
 
 function King:color()

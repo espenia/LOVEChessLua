@@ -1,14 +1,14 @@
+Object = require "classic"
+require "board"
+
 function love.load()
-    Object = require "classic"
-    require "piece"
-    require "pawn"
-    pawn = Pawn()
+    board = Board()
 end
 
 function love.update(dt)
-    pawn:update(dt)
+    board:update(dt)
 end
 
 function love.draw()
-    pawn:draw()
+    board:draw()
 end
