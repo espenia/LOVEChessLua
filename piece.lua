@@ -53,13 +53,22 @@ function Piece:isPressed()
 end
 
 function Piece:drag()
+    local x,y = 0,0
     if self.clicked then
-        self.x, self.y = love.mouse.getPosition()
-        self.x = math.floor((self.x - self.xOffset) / self.gridSize) * self.gridSize
-        self.x = self.x + self.xOffset + (self.gridSize - self.width) / 2
-        self.y = math.floor((self.y - self.yOffset) / self.gridSize) * self.gridSize
-        self.y = self.y + self.yOffset + (self.gridSize - self.height) / 2
+        x, y = love.mouse.getPosition()
+        if self:mouseOnBoard(x, y) then
+            x = math.floor((x - self.xOffset) / self.gridSize) * self.gridSize
+            self.x = x + self.xOffset + (self.gridSize - self.width) / 2
+            y = math.floor((y - self.yOffset) / self.gridSize) * self.gridSize
+            self.y = y + self.yOffset + (self.gridSize - self.height) / 2
+        end
     end
+end
+
+function Piece:mouseOnBoard(x, y)
+    local xAxisOnBoard = x > self.xOffset and x < self.xOffset + 8 * self.gridSize
+    local yAxisOnBoard = y > self.yOffset and y < self.yOffset + 8 * self.gridSize
+    return xAxisOnBoard and yAxisOnBoard
 end
 
 function Piece:setColor(i)
