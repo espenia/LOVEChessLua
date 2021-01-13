@@ -2,9 +2,10 @@ Piece = Object:extend()
 
 
 function Piece:new(color, x, y, gridSize, xOffset, yOffset)
+    local imgGridRatio = 0.9 -- img has 90% width of grid width
     self.gridSize = gridSize
-    self.widthScale = 0.17
-    self.heightScale = 0.17
+    self.heightScale = gridSize * imgGridRatio / self.image:getHeight()
+    self.widthScale = self.heightScale -- squared
     self.width = self.image:getWidth() * self.widthScale
     self.height = self.image:getHeight() * self.heightScale
     self.x = x + (self.gridSize - self.width) / 2
@@ -14,6 +15,7 @@ function Piece:new(color, x, y, gridSize, xOffset, yOffset)
     self.color = color
     self.xOffset = xOffset
     self.yOffset = yOffset
+    self.drawOffset = 5
 end
 
 function Piece:update(dt)
@@ -30,7 +32,9 @@ function Piece:keyboardMove()
 end
 
 function Piece:draw()
-    love.graphics.draw(self.image, self.x, self.y, 0, self.widthScale, self.heightScale)
+    local lift = 0
+    if self.clicked then lift = self.drawOffset end
+    love.graphics.draw(self.image, self.x, self.y - lift, 0, self.widthScale, self.heightScale)
 end
 
 function Piece:isPressed()

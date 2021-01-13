@@ -10,10 +10,14 @@ require "knight"
 Board = Object:extend()
 
 function Board:new()
-    self.offset = 120
+    self.xOffset = 120
+    self.yOffset = self.xOffset / 4
     self.gridSize = 67
     self.pieces = self:Pieces()
     self.pressed = -1 --index of pressed piece. -1 == none pressed
+    self.imageDark = love.graphics.newImage("assets/square-brown-dark.png")
+    self.imageLight = love.graphics.newImage("assets/square-brown-light.png")
+    self.imageScale = self.gridSize / self.imageDark:getWidth()
 end
 
 function Board:update(dt)
@@ -43,6 +47,7 @@ function Board:updateAll()
 end
 
 function Board:draw()
+    self:drawBackground()
     for i = 1, #self.pieces do
         if self.pressed ~= i then
             self.pieces[i]:draw()
@@ -51,6 +56,19 @@ function Board:draw()
     -- draws pressed piece on top
     if self.pressed ~= -1 then
         self.pieces[self.pressed]:draw()
+    end
+end
+
+function Board:drawBackground()
+    local scale, xPos, yPos = self.imageScale, 0, 0
+    for i = 1, 4 do
+        for j = 1,8 do
+            xPos = (2 * i - 2 + j % 2) * self.gridSize + self.xOffset
+            yPos = (j - 1) * self.gridSize + self.yOffset
+            love.graphics.draw(self.imageDark, xPos, yPos, 0, scale, scale)
+            xPos = (2 * i - 2 + (j + 1) % 2) * self.gridSize + self.xOffset
+            love.graphics.draw(self.imageLight, xPos, yPos, 0, scale, scale)
+        end
     end
 end
 
@@ -63,8 +81,8 @@ end
 
 function Board:WhitePieces(pieces)
     local step = self.gridSize
-    local xOffset = self.offset
-    local yOffset = self.offset / 4
+    local xOffset = self.xOffset
+    local yOffset = self.yOffset
     local boardEnd = 8 * self.gridSize
 
     table.insert(pieces, Knight("w", xOffset + step, yOffset, step, xOffset, yOffset))
@@ -82,8 +100,8 @@ end
 
 function Board:blackPieces(pieces)
     local step = self.gridSize
-    local xOffset = self.offset
-    local yOffset = self.offset / 4
+    local xOffset = self.xOffset
+    local yOffset = self.yOffset
     local boardEnd = 8 * self.gridSize
 
     table.insert(pieces, Knight("b", xOffset + step, boardEnd + yOffset - step, step, xOffset, yOffset))
