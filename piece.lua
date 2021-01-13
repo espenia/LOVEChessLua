@@ -1,5 +1,6 @@
 Piece = Object:extend()
 
+require "square"
 
 function Piece:new(color, x, y, gridSize, xOffset, yOffset)
     local imgGridRatio = 0.9 -- img has 90% width of grid width
@@ -18,6 +19,11 @@ function Piece:new(color, x, y, gridSize, xOffset, yOffset)
     self.drawOffset = 5
 end
 
+function Piece:move(x, y)
+    self.x = x * self.gridSize + self.xOffset + (self.gridSize - self.width) / 2
+    self.y = y * self.gridSize + self.yOffset + (self.gridSize - self.height) / 2
+end
+
 function Piece:update(dt)
     self:isPressed()
     self:drag()
@@ -30,8 +36,7 @@ function Piece:getChessPos()
 end
 
 function Piece:getName()
-    local x,y = self:getChessPos()
-    return self.color .. self.name .. tostring(x) .. tostring(y)
+    return self.name
 end
 
 function Piece:keyboardMove()
