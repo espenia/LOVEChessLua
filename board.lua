@@ -84,51 +84,55 @@ end
 
 function Board:classicStart()
     pieces = {}
-    self:whitePieces(pieces)
-    self:blackPieces(pieces)
+    self:whitePiecesDefault(pieces)
+    self:blackPiecesDefault(pieces)
     return pieces
 end
 
-function Board:whitePieces(pieces)
+function Board:whitePiecesDefault(pieces)
     local step = self.gridSize
     local xOffset = self.xOffset
     local yOffset = self.yOffset
     local boardEnd = 8 * self.gridSize
 
-    table.insert(pieces, Knight("w", xOffset + step, yOffset, step, xOffset, yOffset))
-    table.insert(pieces, Knight("w", xOffset + boardEnd - 2 *step, yOffset, step, xOffset, yOffset))
-    table.insert(pieces, Bishop("w", xOffset +  2 * step, yOffset, step, xOffset, yOffset))
-    table.insert(pieces, Bishop("w", xOffset +  boardEnd - 3 * step, yOffset, step, xOffset, yOffset))
-    table.insert(pieces, Rook("w", xOffset +  0, yOffset, step, xOffset, yOffset))
-    table.insert(pieces, Rook("w", xOffset +  boardEnd - step, yOffset, step, xOffset, yOffset))
-    table.insert(pieces, Queen("w", xOffset +  3 * step, yOffset, step, xOffset, yOffset))
-    table.insert(pieces, King("w", xOffset +  boardEnd - 4  * step, yOffset, step, xOffset, yOffset))
+    self:addPiece(Knight("w", step, 0, step, xOffset, yOffset))
+    self:addPiece(Knight("w", boardEnd - 2 *step, 0, step, xOffset, yOffset))
+    self:addPiece(Bishop("w", 2 * step, 0, step, xOffset, yOffset))
+    self:addPiece(Bishop("w", boardEnd - 3 * step, 0, step, xOffset, yOffset))
+    self:addPiece(Rook("w", 0, 0, step, xOffset, yOffset))
+    self:addPiece(Rook("w", boardEnd - step, 0, step, xOffset, yOffset))
+    self:addPiece(Queen("w", 3 * step, 0, step, xOffset, yOffset))
+    self:addPiece(King("w", boardEnd - 4  * step, 0, step, xOffset, yOffset))
     for i = 0, 7 do
-        table.insert(pieces, Pawn("w", xOffset + i * step, step + yOffset, step, xOffset, yOffset))
+        self:addPiece(Pawn("w", i * step, step, step, xOffset, yOffset))
     end
 end
 
-function Board:blackPieces(pieces)
+function Board:blackPiecesDefault(pieces)
     local step = self.gridSize
     local xOffset = self.xOffset
     local yOffset = self.yOffset
     local boardEnd = 8 * self.gridSize
 
-    table.insert(pieces, Knight("b", xOffset + step, boardEnd + yOffset - step, step, xOffset, yOffset))
-    table.insert(pieces, Knight("b", xOffset + boardEnd - 2 *step, boardEnd + yOffset - step, step, xOffset, yOffset))
-    table.insert(pieces, Bishop("b", xOffset +  2 * step, boardEnd + yOffset - step, step, xOffset, yOffset))
-    table.insert(pieces, Bishop("b", xOffset +  boardEnd - 3 * step, boardEnd + yOffset - step, step, xOffset, yOffset))
-    table.insert(pieces, Rook("b", xOffset +  0, boardEnd + yOffset - step, step, xOffset, yOffset))
-    table.insert(pieces, Rook("b", xOffset +  boardEnd - step, boardEnd + yOffset - step, step, xOffset, yOffset))
-    table.insert(pieces, Queen("b", xOffset +  3 * step, boardEnd + yOffset - step, step, xOffset, yOffset))
-    table.insert(pieces, King("b", xOffset +  boardEnd - 4  * step, boardEnd + yOffset - step, step, xOffset, yOffset))
+    self:addPiece(Knight("b", step, boardEnd - step, step, xOffset, yOffset))
+    self:addPiece(Knight("b", boardEnd - 2 *step, boardEnd - step, step, xOffset, yOffset))
+    self:addPiece(Bishop("b",  2 * step, boardEnd - step, step, xOffset, yOffset))
+    self:addPiece(Bishop("b",  boardEnd - 3 * step, boardEnd - step, step, xOffset, yOffset))
+    self:addPiece(Rook("b",  0, boardEnd - step, step, xOffset, yOffset))
+    self:addPiece(Rook("b",  boardEnd - step, boardEnd - step, step, xOffset, yOffset))
+    self:addPiece(Queen("b",  3 * step, boardEnd - step, step, xOffset, yOffset))
+    self:addPiece(King("b",  boardEnd - 4  * step, boardEnd - step, step, xOffset, yOffset))
     for i = 0, 7 do
-        table.insert(pieces, Pawn("b", xOffset + i * step,  boardEnd + yOffset - 2 * step , step, xOffset, yOffset))
+        self:addPiece(Pawn("b", i * step,  boardEnd - 2 * step , step, xOffset, yOffset))
     end
 end
 
 function Board:getLastMove()
     return self.lastMove
+end
+
+function Board:addPiece(piece)
+    table.insert(pieces, piece)
 end
 
 function Board:getPieces()

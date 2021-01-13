@@ -9,13 +9,13 @@ function Piece:new(color, x, y, gridSize, xOffset, yOffset)
     self.widthScale = self.heightScale -- squared
     self.width = self.image:getWidth() * self.widthScale
     self.height = self.image:getHeight() * self.heightScale
-    self.x = x + (self.gridSize - self.width) / 2
-    self.y = y + (self.gridSize - self.height) / 2
+    self.xOffset = xOffset
+    self.yOffset = yOffset
+    self.x = x + self.xOffset + (self.gridSize - self.width) / 2
+    self.y = y + self.yOffset + (self.gridSize - self.height) / 2
     self.speed = 500
     self.clicked = false
     self.color = color
-    self.xOffset = xOffset
-    self.yOffset = yOffset
     self.drawOffset = 5
 end
 
