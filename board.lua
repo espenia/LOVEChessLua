@@ -1,10 +1,10 @@
 require "piece"
-require "pawn"
-require "bishop"
-require "king"
-require "queen"
-require "rook"
-require "knight"
+require "Pieces/pawn"
+require "Pieces/bishop"
+require "Pieces/king"
+require "Pieces/queen"
+require "Pieces/rook"
+require "Pieces/knight"
 
 
 Board = Object:extend()
