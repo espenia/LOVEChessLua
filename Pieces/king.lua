@@ -8,6 +8,7 @@ function King:new(color, x, y, gridSize, xOffset, yOffset)
         self.image = love.graphics.newImage("assets/king-black.png")
     end
     self.super.new(self, color, x, y, gridSize, xOffset, yOffset)
+    self.name = "king"
 end
 
 function King:color()

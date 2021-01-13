@@ -8,6 +8,7 @@ function Pawn:new(color, x, y, gridSize, xOffset, yOffset)
         self.image = love.graphics.newImage("assets/pawn-black.png")
     end
     self.super.new(self, color, x, y, gridSize, xOffset, yOffset)
+    self.name = "pawn"
 end
 
 function Pawn:color()

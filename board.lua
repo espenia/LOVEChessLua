@@ -10,7 +10,7 @@ require "Pieces/knight"
 Board = Object:extend()
 
 function Board:new()
-    self.xOffset = 120
+    self.xOffset = 128
     self.yOffset = self.xOffset / 4
     self.gridSize = 67
     self.pieces = self:Pieces()
@@ -56,6 +56,7 @@ function Board:draw()
     -- draws pressed piece on top
     if self.pressed ~= -1 then
         self.pieces[self.pressed]:draw()
+        love.graphics.print(self.pieces[self.pressed]:getName(), 0, 0)
     end
 end
 

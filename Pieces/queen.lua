@@ -8,6 +8,7 @@ function Queen:new(color, x, y, gridSize, xOffset, yOffset)
         self.image = love.graphics.newImage("assets/queen-black.png")
     end
     self.super.new(self, color, x, y, gridSize, xOffset, yOffset)
+    self.name = "queen"
 end
 
 function Queen:color()

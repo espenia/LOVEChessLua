@@ -8,6 +8,7 @@ function Knight:new(color, x, y, gridSize, xOffset, yOffset)
         self.image = love.graphics.newImage("assets/knight-black.png")
     end
     self.super.new(self, color, x, y, gridSize, xOffset, yOffset)
+    self.name = "knight"
 end
 
 function Knight:color()

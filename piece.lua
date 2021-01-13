@@ -23,6 +23,17 @@ function Piece:update(dt)
     self:drag()
 end
 
+function Piece:getChessPos()
+    local x = math.floor((self.x - self.xOffset) / self.gridSize)
+    local y = math.floor((self.y - self.yOffset) / self.gridSize)
+    return x,y
+end
+
+function Piece:getName()
+    local x,y = self:getChessPos()
+    return self.color .. self.name .. tostring(x) .. tostring(y)
+end
+
 function Piece:keyboardMove()
     if love.keyboard.isDown("left") then
         self.x = self.x - self.speed * dt
@@ -73,8 +84,8 @@ end
 
 function Piece:setColor(i)
     if i == 0 then
-        self.color = "white"
+        self.color = "w"
     else
-        self.color = "black"
+        self.color = "b"
     end
 end

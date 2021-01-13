@@ -8,6 +8,7 @@ function Rook:new(color, x, y, gridSize, xOffset, yOffset)
         self.image = love.graphics.newImage("assets/rook-black.png")
     end
     self.super.new(self, color, x, y, gridSize, xOffset, yOffset)
+    self.name = "rook"
 end
 
 function Rook:color()

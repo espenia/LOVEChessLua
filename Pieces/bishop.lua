@@ -8,6 +8,7 @@ function Bishop:new(color, x, y, gridSize, xOffset, yOffset)
         self.image = love.graphics.newImage("assets/bishop-black.png")
     end
     self.super.new(self, color, x, y, gridSize, xOffset, yOffset)
+    self.name = "bishop"
 end
 
 function Bishop:color()
