@@ -10,7 +10,8 @@ require "knight"
 Board = Object:extend()
 
 function Board:new()
-    self.gridSize = 100
+    self.offset = 120
+    self.gridSize = 67
     self.pieces = self:Pieces()
     self.pressed = -1 --index of pressed piece. -1 == none pressed
 end
@@ -56,21 +57,44 @@ end
 function Board:Pieces()
     pieces = {}
     self:WhitePieces(pieces)
+    self:blackPieces(pieces)
     return pieces
 end
 
 function Board:WhitePieces(pieces)
     local step = self.gridSize
+    local xOffset = self.offset
+    local yOffset = self.offset / 4
     local boardEnd = 8 * self.gridSize
-    table.insert(pieces, Knight("w", step, 20))
-    table.insert(pieces, Knight("w", boardEnd - 2 *step, 20))
-    table.insert(pieces, Bishop("w", 2 * step, 20))
-    table.insert(pieces, Bishop("w", boardEnd - 3 * step, 20))
-    table.insert(pieces, Rook("w", 0, 20))
-    table.insert(pieces, Rook("w", boardEnd - step, 20))
-    table.insert(pieces, Queen("w", 3 * step, 20))
-    table.insert(pieces, King("w", boardEnd - 4  * step, 20))
+
+    table.insert(pieces, Knight("w", xOffset + step, yOffset, step, xOffset, yOffset))
+    table.insert(pieces, Knight("w", xOffset + boardEnd - 2 *step, yOffset, step, xOffset, yOffset))
+    table.insert(pieces, Bishop("w", xOffset +  2 * step, yOffset, step, xOffset, yOffset))
+    table.insert(pieces, Bishop("w", xOffset +  boardEnd - 3 * step, yOffset, step, xOffset, yOffset))
+    table.insert(pieces, Rook("w", xOffset +  0, yOffset, step, xOffset, yOffset))
+    table.insert(pieces, Rook("w", xOffset +  boardEnd - step, yOffset, step, xOffset, yOffset))
+    table.insert(pieces, Queen("w", xOffset +  3 * step, yOffset, step, xOffset, yOffset))
+    table.insert(pieces, King("w", xOffset +  boardEnd - 4  * step, yOffset, step, xOffset, yOffset))
     for i = 0, 7 do
-        table.insert(pieces, Pawn("w", i * step, 120))
+        table.insert(pieces, Pawn("w", xOffset + i * step, step + yOffset, step, xOffset, yOffset))
+    end
+end
+
+function Board:blackPieces(pieces)
+    local step = self.gridSize
+    local xOffset = self.offset
+    local yOffset = self.offset / 4
+    local boardEnd = 8 * self.gridSize
+
+    table.insert(pieces, Knight("b", xOffset + step, boardEnd + yOffset - step, step, xOffset, yOffset))
+    table.insert(pieces, Knight("b", xOffset + boardEnd - 2 *step, boardEnd + yOffset - step, step, xOffset, yOffset))
+    table.insert(pieces, Bishop("b", xOffset +  2 * step, boardEnd + yOffset - step, step, xOffset, yOffset))
+    table.insert(pieces, Bishop("b", xOffset +  boardEnd - 3 * step, boardEnd + yOffset - step, step, xOffset, yOffset))
+    table.insert(pieces, Rook("b", xOffset +  0, boardEnd + yOffset - step, step, xOffset, yOffset))
+    table.insert(pieces, Rook("b", xOffset +  boardEnd - step, boardEnd + yOffset - step, step, xOffset, yOffset))
+    table.insert(pieces, Queen("b", xOffset +  3 * step, boardEnd + yOffset - step, step, xOffset, yOffset))
+    table.insert(pieces, King("b", xOffset +  boardEnd - 4  * step, boardEnd + yOffset - step, step, xOffset, yOffset))
+    for i = 0, 7 do
+        table.insert(pieces, Pawn("b", xOffset + i * step,  boardEnd + yOffset - 2 * step , step, xOffset, yOffset))
     end
 end

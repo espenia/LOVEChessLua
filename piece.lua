@@ -1,17 +1,19 @@
 Piece = Object:extend()
 
 
-function Piece:new(color, x, y)
-    self.gridSize = 100
-    self.widthScale = 0.2
-    self.heightScale = 0.2
-    self.x = x
-    self.y = y
-    self.speed = 500
+function Piece:new(color, x, y, gridSize, xOffset, yOffset)
+    self.gridSize = gridSize
+    self.widthScale = 0.17
+    self.heightScale = 0.17
     self.width = self.image:getWidth() * self.widthScale
     self.height = self.image:getHeight() * self.heightScale
+    self.x = x + (self.gridSize - self.width) / 2
+    self.y = y + (self.gridSize - self.height) / 2
+    self.speed = 500
     self.clicked = false
     self.color = color
+    self.xOffset = xOffset
+    self.yOffset = yOffset
 end
 
 function Piece:update(dt)
@@ -49,8 +51,10 @@ end
 function Piece:drag()
     if self.clicked then
         self.x, self.y = love.mouse.getPosition()
-        self.x = math.floor(self.x / self.gridSize) * self.gridSize
-        self.y = math.floor(self.y / self.gridSize) * self.gridSize
+        self.x = math.floor((self.x - self.xOffset) / self.gridSize) * self.gridSize
+        self.x = self.x + self.xOffset + (self.gridSize - self.width) / 2
+        self.y = math.floor((self.y - self.yOffset) / self.gridSize) * self.gridSize
+        self.y = self.y + self.yOffset + (self.gridSize - self.height) / 2
     end
 end
 
