@@ -14,3 +14,14 @@ end
 function Rook:color()
     
 end
+
+function Rook:validateMovement(movement)
+    xo,yo = movement:getStart()
+    xf,yf = movement:getEnd()
+    if  (xo == xf) or 
+        (yo == yf) then
+        return true
+    else
+        return false
+    end
+end  
