@@ -5,9 +5,13 @@ function Game:new()
     self.checkstatus = "no"
 end
 
-function Game:validateMove(move, pieces)
-    --completar
-    return true
+function Game:validateMove(pieces, pressed,lastMove)
+    if pieces[pressed]:validateMovement(lastMove) then
+        return true
+    else
+        return false
+    end
+    -- return true
 end
 
 function Game:finished()
