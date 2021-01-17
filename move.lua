@@ -20,3 +20,7 @@ end
 function Move:getStart()
     return self.startSquare:get()
 end
+
+function Move:getEnd()
+    return self.endSquare:get()
+end
