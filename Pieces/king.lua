@@ -14,3 +14,22 @@ end
 function King:color()
     
 end
+
+function King:validateMovement(movement)
+    xo,yo = movement:getStart()
+    xf,yf = movement:getEnd()
+    deltaX = xo - xf
+    deltaY = yo - yf
+    if  (deltaX == 1) or
+        (deltaX == - 1) or 
+        (deltaY == 1) or
+        (deltaY == - 1) or
+        (deltaX == 1 and deltaY == 1) or
+        (deltaX == 1 and deltaY == -1) or
+        (deltaX == -1 and deltaY == 1) or
+        (deltaX == -1 and deltaY == -1) then
+        return true
+    else
+        return false
+    end
+end  
