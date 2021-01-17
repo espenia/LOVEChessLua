@@ -20,10 +20,10 @@ function King:validateMovement(movement)
     xf,yf = movement:getEnd()
     deltaX = xo - xf
     deltaY = yo - yf
-    if  (deltaX == 1) or
-        (deltaX == - 1) or 
-        (deltaY == 1) or
-        (deltaY == - 1) or
+    if  (deltaX == 1 and deltaY == 0) or
+        (deltaX == - 1 and deltaY == 0) or 
+        (deltaX == 0 and deltaY == 1) or
+        (deltaX == 0 and deltaY == - 1) or
         (deltaX == 1 and deltaY == 1) or
         (deltaX == 1 and deltaY == -1) or
         (deltaX == -1 and deltaY == 1) or
