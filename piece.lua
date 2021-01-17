@@ -2,7 +2,7 @@ Piece = Object:extend()
 
 require "square"
 
-function Piece:new(color, x, y, gridSize, xOffset, yOffset)
+function Piece:new(color, x, y, gridSize, xOffset, yOffset, posX, posY)
     local imgGridRatio = 0.9 -- img has 90% width of grid width
     self.gridSize = gridSize
     self.heightScale = gridSize * imgGridRatio / self.image:getHeight()
@@ -17,6 +17,7 @@ function Piece:new(color, x, y, gridSize, xOffset, yOffset)
     self.clicked = false
     self.color = color
     self.drawOffset = 5
+    self.actualPos = Square:set(posX,PosY)
 end
 
 function Piece:move(x, y)
