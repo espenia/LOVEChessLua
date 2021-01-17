@@ -14,3 +14,12 @@ end
 function Queen:color()
     
 end
+
+function Queen:validateMovement(movement)
+    if  Rook:validateMovement(movement) or
+        Bishop:validateMovement(movement)then
+        return true
+    else
+        return false
+    end
+end  
