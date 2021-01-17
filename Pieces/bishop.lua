@@ -14,3 +14,15 @@ end
 function Bishop:color()
     
 end
+
+function Bishop:validateMovement(movement)
+    xo,yo = movement:getStart()
+    xf,yf = movement:getEnd()
+    delta = xf-xo
+    if  (yo + delta == yf) or 
+        (yo - delta == yf) then
+        return true
+    else
+        return false
+    end
+end  
