@@ -14,3 +14,16 @@ end
 function Knight:color()
     
 end
+
+function Knight:validateMovement(movement)
+    xo,yo = movement:getStart()
+    xf,yf = movement:getEnd()
+    if  ((xo == xf + 1 or xo == xf -1) and
+        (yo == yf + 2 or yo == yf -2)) or 
+        ((xo == xf + 2 or xo == xf - 2) and
+        (yo == yf + 1 or yo == yf -1))   then
+        return true
+    else
+        return false
+    end
+end  
