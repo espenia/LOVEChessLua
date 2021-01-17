@@ -151,3 +151,7 @@ end
 function Board:isNewMove()
     return self.newMove
 end
+
+function Board:getMoved()
+    return self.moved
+end
