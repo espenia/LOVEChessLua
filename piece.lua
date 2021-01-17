@@ -17,7 +17,8 @@ function Piece:new(color, x, y, gridSize, xOffset, yOffset, posX, posY)
     self.clicked = false
     self.color = color
     self.drawOffset = 5
-    self.actualPos = Square:set(posX,PosY)
+    self.actualPos = Square()
+    self.actualPos:set(posX, posY)
 end
 
 function Piece:move(x, y)
@@ -94,4 +95,9 @@ function Piece:setColor(i)
     else
         self.color = "b"
     end
+end
+
+function Piece:updatePos(lastMove)
+    xf,yf = lastMove:getEnd()
+    self.actualPos:set(xf,yf)
 end

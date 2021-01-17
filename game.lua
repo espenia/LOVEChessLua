@@ -7,6 +7,7 @@ end
 
 function Game:validateMove(pieces, pressed,lastMove)
     if pieces[pressed]:validateMovement(lastMove) then
+        pieces[pressed]:updatePos(lastMove)
         return true
     else
         return false

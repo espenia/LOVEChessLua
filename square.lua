@@ -1,8 +1,8 @@
 Square = Object:extend()
 
-function Square:new()
-    self.x = 0
-    self.y = 0
+function Square:new(x, y)
+    self.x = x
+    self.y = y
 end
 
 function Square:set(x, y)
