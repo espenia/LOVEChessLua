@@ -20,6 +20,18 @@ function Piece:new(color, x, y, gridSize, xOffset, yOffset, posX, posY)
     self.actualPos = Square:set(posX,PosY)
 end
 
+function Piece:getColor()
+    return self.color
+end
+
+-- function Piece:setColor(i)
+--     if i == 0 then
+--         self.color = "w"
+--     else
+--         self.color = "b"
+--     end
+-- end
+
 function Piece:move(x, y)
     self.x = x * self.gridSize + self.xOffset + (self.gridSize - self.width) / 2
     self.y = y * self.gridSize + self.yOffset + (self.gridSize - self.height) / 2
@@ -88,10 +100,3 @@ function Piece:mouseOnBoard(x, y)
     return xAxisOnBoard and yAxisOnBoard
 end
 
-function Piece:setColor(i)
-    if i == 0 then
-        self.color = "w"
-    else
-        self.color = "b"
-    end
-end

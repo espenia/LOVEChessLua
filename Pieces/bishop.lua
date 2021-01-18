@@ -11,9 +11,6 @@ function Bishop:new(color, x, y, gridSize, xOffset, yOffset)
     self.name = "bishop"
 end
 
-function Bishop:color()
-    
-end
 
 function Bishop:validateMovement(movement)
     xo,yo = movement:getStart()

@@ -1,5 +1,26 @@
 {
     "Lua.diagnostics.globals": [
-        "love"
-    ]
+        "love",
+        "board",
+        "game"
+    ],
+    // "launch": {
+    //     "configurations": 
+    //     [
+    //         {
+    //             "type": "lua-local",
+    //             "request": "launch",
+    //             "name": "Debug LOVE",
+    //             "program":
+    //             {
+    //                 "command": "love"
+    //             },
+    //             "args": 
+    //             [
+    //                 "${C:\\Users\\esteban peña\\Desktop\\loveChesslua\\LOVEChessLua}",
+    //                 "vsc_debug"
+    //             ],
+    //         },
+    //     ]
+    // },
 }

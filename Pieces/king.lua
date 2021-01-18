@@ -11,6 +11,7 @@ function King:new(color, x, y, gridSize, xOffset, yOffset)
     self.name = "king"
 end
 
+
 function King:color()
     
 end

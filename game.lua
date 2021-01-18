@@ -5,13 +5,26 @@ function Game:new()
     self.checkstatus = "no"
 end
 
-function Game:validateMove(pieces, pressed,lastMove)
-    if pieces[pressed]:validateMovement(lastMove) then
-        return true
-    else
-        return false
+function Game:setTurn(color)
+    self.turn = color
+end
+
+function Game:getTurn()
+    if self.turn ~= "w" and self.turn ~="b" then
+        self.turn = "w"
     end
-    -- return true
+    return self.turn
+end
+
+function Game:validateMove(pieces, pressed,lastMove)
+    if pieces[pressed]:getColor() ==  self.turn then  -- siempre devuelve false por alguna razon
+        if pieces[pressed]:validateMovement(lastMove) then
+            return true
+        else
+            return false
+        end
+    end
+    return false
 end
 
 function Game:finished()

@@ -11,9 +11,6 @@ function Pawn:new(color, x, y, gridSize, xOffset, yOffset)
     self.name = "pawn"
 end
 
-function Pawn:color()
-    
-end
 
 function Pawn:validateMovement(movement)
     xo,yo = movement:getStart()
