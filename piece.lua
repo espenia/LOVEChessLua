@@ -101,3 +101,17 @@ function Piece:updatePos(lastMove)
     xf,yf = lastMove:getEnd()
     self.actualPos:set(xf,yf)
 end
+
+function Piece:getColor()
+    return self.color
+end
+
+function Piece:checkPos( colorf, xf, yf)
+    myX, myY = self.actualPos:get();
+
+    if myX == xf and myY == yf and self.color == colorf then
+        return true
+    else
+        return false
+    end
+end
