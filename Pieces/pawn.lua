@@ -1,13 +1,13 @@
 Pawn = Piece:extend()
 
 
-function Pawn:new(color, x, y, gridSize, xOffset, yOffset)
+function Pawn:new(color, x, y, gridSize, xOffset, yOffset, posX, posY)
     if color == "w" then
         self.image = love.graphics.newImage("assets/pawn-white.png")
     else
         self.image = love.graphics.newImage("assets/pawn-black.png")
     end
-    self.super.new(self, color, x, y, gridSize, xOffset, yOffset)
+    self.super.new(self, color, x, y, gridSize, xOffset, yOffset, posX, posY)
     self.name = "pawn"
 end
 
