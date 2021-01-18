@@ -27,6 +27,14 @@ function Game:validateMove(pieces, pressed,lastMove)
     return false
 end
 
+function Game:nextTurn()
+    if game:getTurn() == "w" then
+        game:setTurn("b")
+    else
+        game:setTurn("w")
+    end    
+end
+
 function Game:finished()
 end
 

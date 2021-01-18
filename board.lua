@@ -56,6 +56,8 @@ function Board:updateAll()
     end
 end
 
+
+
 function Board:draw()
     self:drawBackground()
     for i = 1, #self.pieces do
@@ -150,7 +152,12 @@ function Board:removeCapturedPiece()
 end
 
 function Board:isNewMove()
-    return self.newMove
+    if self.newMove then
+        self.newMove = false
+        return true
+    else
+        return false
+    end
 end
 
 function Board:getMoved()
