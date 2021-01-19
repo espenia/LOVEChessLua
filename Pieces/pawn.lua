@@ -25,4 +25,8 @@ function Pawn:validateMovement(movement)
     else
         return false
     end
-end    
+end   
+
+function Pawn:checkTrajectory(x, y, xf, yf, xo,yo)
+    return false;
+end

@@ -33,3 +33,7 @@ function King:validateMovement(movement)
         return false
     end
 end  
+
+function King:checkTrajectory( x, y, xf, yf, xo,yo)
+    return false;
+end

@@ -23,3 +23,7 @@ function Queen:validateMovement(movement)
         return false
     end
 end  
+
+function Queen:checkTrajectory( x, y, xf, yf, xo,yo)
+    return false;
+end

@@ -25,4 +25,8 @@ function Bishop:validateMovement(movement)
     else
         return false
     end
-end  
+end 
+
+function Bishop:checkTrajectory(x, y, xf, yf, xo,yo)
+    return false;
+end
