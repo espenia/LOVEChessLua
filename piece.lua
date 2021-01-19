@@ -115,3 +115,7 @@ function Piece:checkPos( colorf, xf, yf)
         return false
     end
 end
+
+function Piece:getActualPos()
+    return self.actualPos:get()
+end

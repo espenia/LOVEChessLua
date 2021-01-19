@@ -7,7 +7,7 @@ end
 
 function Game:validateMove(pieces, pressed, lastMove)
     if  pieces[pressed]:validateMovement(lastMove) and
-        self:checkEmptyBox(pieces, pieces[pressed]:getColor(), lastMove, pressed) then
+        self:checkMovement(pieces, pieces[pressed]:getColor(), lastMove, pressed) then
         pieces[pressed]:updatePos(lastMove)
         return true
     else
@@ -22,10 +22,15 @@ end
 function Game:checkmated()
 end
 
-function Game:checkEmptyBox(pieces, color, movement, pressed)
+function Game:checkMovement(pieces, color, movement, pressed)
     xf,yf = movement:getEnd();
+    xo,yo = movement:getStart();
 
     for i = 1, 32 do
+        x,y = pieces[i]:getActualPos()
+        if  pieces[pressed]:checkTrajectory(movement, x, y, xf, yf, xo,yo) then
+            return false
+        end
         if  pieces[i]:checkPos(color, xf, yf) and
             pressed ~= i then
             return false
