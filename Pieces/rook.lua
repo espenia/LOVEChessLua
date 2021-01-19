@@ -32,7 +32,7 @@ function Rook:checkTrajectory( x, y, xf, yf, xo,yo)
         xo < x and x < xf and y == yo or
         yf < y and y < yo and x == xo or
         xf < x and x < xo and y == yo then
-        return true;
+        return true
     else
         return false
     end
