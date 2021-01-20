@@ -28,10 +28,10 @@ end
 
 function Rook:checkTrajectory( x, y, xf, yf, xo,yo)
 
-    if  yo < y and y < yf and x == xo or
-        xo < x and x < xf and y == yo or
-        yf < y and y < yo and x == xo or
-        xf < x and x < xo and y == yo then
+    if  (yo < y and y < yf and x == xo) or
+        (xo < x and x < xf and y == yo) or
+        (yf < y and y < yo and x == xo) or
+        (xf < x and x < xo and y == yo) then
         return true
     else
         return false
