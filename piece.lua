@@ -17,7 +17,8 @@ function Piece:new(color, x, y, gridSize, xOffset, yOffset, posX, posY)
     self.clicked = false
     self.color = color
     self.drawOffset = 5
-    self.actualPos = Square:set(posX,PosY)
+    self.actualPos = Square()
+    self.actualPos:set(posX, posY)
 end
 
 function Piece:getColor()
@@ -100,3 +101,33 @@ function Piece:mouseOnBoard(x, y)
     return xAxisOnBoard and yAxisOnBoard
 end
 
+function Piece:setColor(i)
+    if i == 0 then
+        self.color = "w"
+    else
+        self.color = "b"
+    end
+end
+
+function Piece:updatePos(lastMove)
+    xf,yf = lastMove:getEnd()
+    self.actualPos:set(xf,yf)
+end
+
+function Piece:getColor()
+    return self.color
+end
+
+function Piece:checkPos( colorf, xf, yf)
+    myX, myY = self.actualPos:get();
+
+    if myX == xf and myY == yf and self.color == colorf then
+        return true
+    else
+        return false
+    end
+end
+
+function Piece:getActualPos()
+    return self.actualPos:get()
+end

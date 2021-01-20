@@ -98,16 +98,16 @@ function Board:whitePiecesDefault(pieces)
     local yOffset = self.yOffset
     local boardEnd = 8 * self.gridSize
 
-    self:addPiece(Knight("w", step, 0, step, xOffset, yOffset, 2, 1))
-    self:addPiece(Knight("w", boardEnd - 2 *step, 0, step, xOffset, yOffset, 7, 1))
-    self:addPiece(Bishop("w", 2 * step, 0, step, xOffset, yOffset, 3, 1))
-    self:addPiece(Bishop("w", boardEnd - 3 * step, 0, step, xOffset, yOffset, 6, 1))
-    self:addPiece(Rook("w", 0, 0, step, xOffset, yOffset, 1, 1))
-    self:addPiece(Rook("w", boardEnd - step, 0, step, xOffset, yOffset, 8, 1))
-    self:addPiece(Queen("w", boardEnd - 4  * step, 0, step, xOffset, yOffset, 5, 1))
-    self:addPiece(King("w", 3 * step, 0, step, xOffset, yOffset, 4, 1))
+    self:addPiece(Knight("w", step, 0, step, xOffset, yOffset, 1, 0))
+    self:addPiece(Knight("w", boardEnd - 2 *step, 0, step, xOffset, yOffset, 6, 0))
+    self:addPiece(Bishop("w", 2 * step, 0, step, xOffset, yOffset, 2, 0))
+    self:addPiece(Bishop("w", boardEnd - 3 * step, 0, step, xOffset, yOffset, 5, 0))
+    self:addPiece(Rook("w", 0, 0, step, xOffset, yOffset, 0, 0))
+    self:addPiece(Rook("w", boardEnd - step, 0, step, xOffset, yOffset, 7, 0))
+    self:addPiece(Queen("w", boardEnd - 4  * step, 0, step, xOffset, yOffset, 4, 0))
+    self:addPiece(King("w", 3 * step, 0, step, xOffset, yOffset, 3, 0))
     for i = 0, 7 do
-        self:addPiece(Pawn("w", i * step, step, step, xOffset, yOffset, i + 1, 2))
+        self:addPiece(Pawn("w", i * step, step, step, xOffset, yOffset, i, 1))
     end
 end
 
@@ -117,16 +117,16 @@ function Board:blackPiecesDefault(pieces)
     local yOffset = self.yOffset
     local boardEnd = 8 * self.gridSize
 
-    self:addPiece(Knight("b", step, boardEnd - step, step, xOffset, yOffset))
-    self:addPiece(Knight("b", boardEnd - 2 *step, boardEnd - step, step, xOffset, yOffset))
-    self:addPiece(Bishop("b",  2 * step, boardEnd - step, step, xOffset, yOffset))
-    self:addPiece(Bishop("b",  boardEnd - 3 * step, boardEnd - step, step, xOffset, yOffset))
-    self:addPiece(Rook("b",  0, boardEnd - step, step, xOffset, yOffset))
-    self:addPiece(Rook("b",  boardEnd - step, boardEnd - step, step, xOffset, yOffset))
-    self:addPiece(Queen("b",  3 * step, boardEnd - step, step, xOffset, yOffset))
-    self:addPiece(King("b",  boardEnd - 4  * step, boardEnd - step, step, xOffset, yOffset))
+    self:addPiece(Knight("b", step, boardEnd - step, step, xOffset, yOffset, 1, 7))
+    self:addPiece(Knight("b", boardEnd - 2 *step, boardEnd - step, step, xOffset, yOffset, 6, 7))
+    self:addPiece(Bishop("b",  2 * step, boardEnd - step, step, xOffset, yOffset, 2, 7))
+    self:addPiece(Bishop("b",  boardEnd - 3 * step, boardEnd - step, step, xOffset, yOffset, 5,7))
+    self:addPiece(Rook("b",  0, boardEnd - step, step, xOffset, yOffset, 0,7))
+    self:addPiece(Rook("b",  boardEnd - step, boardEnd - step, step, xOffset, yOffset, 7, 7))
+    self:addPiece(Queen("b", boardEnd - 4  * step  , boardEnd - step, step, xOffset, yOffset, 4, 7))
+    self:addPiece(King("b", 3 * step , boardEnd - step, step, xOffset, yOffset, 3, 7))
     for i = 0, 7 do
-        self:addPiece(Pawn("b", i * step,  boardEnd - 2 * step , step, xOffset, yOffset, i + 1, 7))
+        self:addPiece(Pawn("b", i * step,  boardEnd - 2 * step , step, xOffset, yOffset, i , 6))
     end
 end
 
