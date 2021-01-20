@@ -167,3 +167,19 @@ end
 function Board:getPressed()
     return self.pressed
 end
+
+function Board:GetKing(color)
+    if color == "w" then
+        for key, piece in pairs(self.pieces) do
+            if  piece:getName() == "king" and piece:getColor() == "w" then
+                return piece
+            end
+        end
+    else
+        for key, piece in pairs(self.pieces) do
+            if  piece:getName() == "king" and piece:getColor() == "b" then
+                return piece
+            end
+        end
+    end
+end
