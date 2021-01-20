@@ -49,7 +49,8 @@ function Game:checkMovement(pieces, color, movement, pressed)
 
     for i = 1, 32 do
         x,y = pieces[i]:getActualPos()
-        if  pieces[pressed]:checkTrajectory(movement, x, y, xf, yf, xo,yo) then -- TODO: tenes un parametro extra aca
+        if  pieces[pressed]:checkTrajectory(x, y, xf, yf, xo,yo) and
+            pressed ~= i then
             return false
         end
         if  pieces[i]:checkPos(color, xf, yf) and

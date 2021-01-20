@@ -25,8 +25,8 @@ function Queen:validateMovement(movement)
 end  
 
 function Queen:checkTrajectory( x, y, xf, yf, xo,yo)
-    if  Rook:checkTrajectory( x, y, xf, yf, xo,yo) or
-        Bishop:checkTrajectory( x, y, xf, yf, xo,yo) then
+    if  (Rook:checkTrajectory( x, y, xf, yf, xo, yo) and (xo == xf or yo == yf)) or
+        (Bishop:checkTrajectory( x, y, xf, yf, xo, yo) and xo ~= xf and yo ~= yf) then
             return true
     else
         return false    

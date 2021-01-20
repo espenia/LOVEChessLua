@@ -25,21 +25,20 @@ function Bishop:validateMovement(movement)
 end 
 
 function Bishop:checkTrajectory(x, y, xf, yf, xo,yo)
-    deltaX = xf - xo
+    deltaX = xf - xo 
     deltaY = yf - yo
-
-    if  ((xo < x and x < xf and 
-        yo < y and y < yf) or
-        (xf < x and x < xo and
-        yf < y and y < yo) or
-        (xo < x and x < xf and 
-        yf < y and y < yo) or
-        (xf < x and x < xo and 
-        yo < y and y < yf)) and
-        (x - y == deltaX and x - y == deltaY) then
-        -- (y - yo == deltaY or y - yo == - deltaY)) then
-        return true
-    else
-        return false
+    if xf < xo then
+        deltaX = xo-xf
     end
+    deltaX = deltaX - 1
+    for i = 1, deltaX do
+        if  (x + i == xf and y + i == yf and x < xf and y < yf and xo < x and yo < y) or
+            (x - i == xf and y + i == yf and x > xf and y < yf and x < xo and yo < y) or
+            (x + i == xf and y - i == yf and x < xf and y > yf and xo < x and yo > y) or
+            (x - i == xf and y - i == yf and x > xf and y > yf and x < xo and yo > y) then
+            return true
+        end
+    end    
+    return false
+    
 end
