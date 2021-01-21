@@ -168,7 +168,7 @@ function Board:getPressed()
     return self.pressed
 end
 
-function Board:GetKing(color)
+function Board:getKing(color)
     if color == "w" then
         for key, piece in pairs(self.pieces) do
             if  piece:getName() == "king" and piece:getColor() == "w" then

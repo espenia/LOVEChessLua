@@ -68,7 +68,7 @@ function Piece:draw()
 end
 
 function Piece:isPressed()
-    local delta = 50
+    local delta = self.gridSize / 3.3
     if love.mouse.isDown(1) then
         local x, y = love.mouse.getPosition()
         if  (x > self.x + self.width / 2 - delta) and
