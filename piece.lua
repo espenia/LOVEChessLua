@@ -19,10 +19,19 @@ function Piece:new(color, x, y, gridSize, xOffset, yOffset, posX, posY)
     self.drawOffset = 5
     self.actualPos = Square()
     self.actualPos:set(posX, posY)
+    self.captured = false
 end
 
 function Piece:getColor()
     return self.color
+end
+
+function Piece:toBeCaptured(toBeCaptured)
+    self.captured = toBeCaptured
+end
+
+function Piece:isCaptured()
+    return self.captured
 end
 
 -- function Piece:setColor(i)
@@ -68,7 +77,7 @@ function Piece:draw()
 end
 
 function Piece:isPressed()
-    local delta = 50
+    local delta = self.gridSize / 3.3
     if love.mouse.isDown(1) then
         local x, y = love.mouse.getPosition()
         if  (x > self.x + self.width / 2 - delta) and
@@ -118,10 +127,20 @@ function Piece:getColor()
     return self.color
 end
 
-function Piece:checkPos( colorf, xf, yf)
+function Piece:checkPos(colorf, xf, yf)
     myX, myY = self.actualPos:get();
 
     if myX == xf and myY == yf and self.color == colorf then
+        return true
+    else
+        return false
+    end
+end
+
+function Piece:checkCoordinates(xf, yf)
+    myX, myY = self.actualPos:get();
+
+    if myX == xf and myY == yf then
         return true
     else
         return false

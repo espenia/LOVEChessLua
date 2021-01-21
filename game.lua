@@ -15,23 +15,35 @@ end
 
 
     
-function Game:validateMove(pieces, pressed,lastMove, board)
+function Game:validateMove(pieces, pressed, lastMove, board)
     if pieces[pressed]:getColor() ==  self.turn then
         king = board:getKing(self.turn)
         if pieces[pressed]:validateMovement(lastMove) and
             self:checkMovement(pieces, pieces[pressed]:getColor(), lastMove, pressed) then
-            --if -self:isKingInCheck(king, pieces) then
-                pieces[pressed]:updatePos(lastMove)
-                return true
-            --end
-        else
+            -- if -self:isKingInCheck(king, pieces) then
+            --     pieces[pressed]:updatePos(lastMove)
+            --     return true
+            -- end
+            capturedPiece = self:checkPieceToBeCaptured(pieces, lastMove, pressed)
+            if (capturedPiece) then 
+                print("remuevo")
+                board:removeCapturedPiece(capturedPiece)
+            end
+
+            pieces[pressed]:updatePos(lastMove)
+            return true
+        --elseif self:checkPieceToBeCaptured(pieces) then
+        --    capturedPiece = self:checkPieceToBeCaptured(pieces)
+        --    board:removeCapturedPiece(capturedPiece)
+        --    return true
+        else 
             return false
         end
     end
     return false
 end
 
-function isKingInCheck(king, pieces)
+--[[function isKingInCheck(king, pieces)
     local opponent = "w"
     if self.turn == "w" then
         opponent = "b"
@@ -44,7 +56,7 @@ function isKingInCheck(king, pieces)
         end
     end
     return false
-end
+end]]--
 
 function Game:nextTurn()
     if game:getTurn() == "w" then
@@ -63,19 +75,33 @@ end
 function Game:checkMovement(pieces, color, movement, pressed)
     xf,yf = movement:getEnd();
     xo,yo = movement:getStart();
-
     for i = 1, 32 do
-        x,y = pieces[i]:getActualPos()
-        if  pieces[pressed]:checkTrajectory(x, y, xf, yf, xo,yo) and
-            pressed ~= i then
-            return false
-        end
-        if  pieces[i]:checkPos(color, xf, yf) and
-            pressed ~= i then
-            return false
+        if (pieces[i]) then
+            x,y = pieces[i]:getActualPos()
+            if  pieces[pressed]:checkTrajectory(x, y, xf, yf, xo, yo) and
+                pressed ~= i then
+                return false
+            end
+            if  pieces[i]:checkPos(color, xf, yf) and
+                pressed ~= i then
+                return false
+            end
         end
     end
     return true
+end
+
+function Game:checkPieceToBeCaptured(pieces, movement, pressed)
+    xf,yf = movement:getEnd();
+    for i = 1, 32 do
+        if  pieces[i] and 
+            pressed ~= i and 
+            pieces[i]:checkCoordinates(xf, yf) then
+            pieces[i]:toBeCaptured(true)
+            return pieces[i]
+        end
+    end
+    return false
 end
 
 function Game:showCurrentTurn(current)
@@ -87,7 +113,7 @@ function Game:showCurrentTurn(current)
     
 end
 
-function Game:canPieceCapture(piece, otherPiece, pieces)
+--[[function Game:canPieceCapture(piece, otherPiece, pieces)
     local xf,yf = otherPiece:getChessPos();
     local xo,yo = piece:getChessPos();
     local movement = Move()
@@ -114,4 +140,4 @@ function Game:canPieceCapture(piece, otherPiece, pieces)
         return true
     end
     return false
-end
+end]]--
