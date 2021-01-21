@@ -2,7 +2,7 @@ Piece = Object:extend()
 
 require "square"
 
-function Piece:new(color, x, y, gridSize, xOffset, yOffset)
+function Piece:new(color, x, y, gridSize, xOffset, yOffset, posX, posY)
     local imgGridRatio = 0.9 -- img has 90% width of grid width
     self.gridSize = gridSize
     self.heightScale = gridSize * imgGridRatio / self.image:getHeight()
@@ -17,7 +17,21 @@ function Piece:new(color, x, y, gridSize, xOffset, yOffset)
     self.clicked = false
     self.color = color
     self.drawOffset = 5
+    self.actualPos = Square()
+    self.actualPos:set(posX, posY)
 end
+
+function Piece:getColor()
+    return self.color
+end
+
+-- function Piece:setColor(i)
+--     if i == 0 then
+--         self.color = "w"
+--     else
+--         self.color = "b"
+--     end
+-- end
 
 function Piece:move(x, y)
     self.x = x * self.gridSize + self.xOffset + (self.gridSize - self.width) / 2
@@ -93,4 +107,27 @@ function Piece:setColor(i)
     else
         self.color = "b"
     end
+end
+
+function Piece:updatePos(lastMove)
+    xf,yf = lastMove:getEnd()
+    self.actualPos:set(xf,yf)
+end
+
+function Piece:getColor()
+    return self.color
+end
+
+function Piece:checkPos( colorf, xf, yf)
+    myX, myY = self.actualPos:get();
+
+    if myX == xf and myY == yf and self.color == colorf then
+        return true
+    else
+        return false
+    end
+end
+
+function Piece:getActualPos()
+    return self.actualPos:get()
 end
