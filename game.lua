@@ -20,10 +20,10 @@ function Game:validateMove(pieces, pressed,lastMove, board)
         king = board:getKing(self.turn)
         if pieces[pressed]:validateMovement(lastMove) and
             self:checkMovement(pieces, pieces[pressed]:getColor(), lastMove, pressed) then
-            if -self:isKingInCheck(king, pieces) then
+            --if -self:isKingInCheck(king, pieces) then
                 pieces[pressed]:updatePos(lastMove)
                 return true
-            end
+            --end
         else
             return false
         end
