@@ -20,6 +20,7 @@ function Piece:new(color, x, y, gridSize, xOffset, yOffset, posX, posY)
     self.actualPos = Square()
     self.actualPos:set(posX, posY)
     self.captured = false
+    self.firstMove = true
 end
 
 function Piece:getColor()
@@ -121,6 +122,7 @@ end
 function Piece:updatePos(lastMove)
     xf,yf = lastMove:getEnd()
     self.actualPos:set(xf,yf)
+    self.firstMove = false
 end
 
 function Piece:getColor()

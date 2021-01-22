@@ -15,8 +15,6 @@ function love.update(dt)
     if board:isNewMove() then
         if game:validateMove(board:getPieces(), board:getMoved(), board:getLastMove(), board) then
             game:nextTurn()
-            --board:removeCapturedPiece()
-            
         else
             board:revertLastMove()
         end

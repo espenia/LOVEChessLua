@@ -61,7 +61,7 @@ function Game:nextTurn()
         game:setTurn("b")
     else
         game:setTurn("w")
-    end    
+    end
 end
 
 function Game:finished()
@@ -95,18 +95,16 @@ function Game:checkMovement(pieces, color, movement, pressed)
             end
         end
     else
-        --if pieces[pressed]:getName() == "pawn" then
-            for i = 1, 32 do
-                if  pieces[i] and 
-                    pieces[i]:checkCoordinates(xf, yf) and 
-                    pieces[pressed]:canCapture(movement) and 
-                    pressed ~= i then
-                    return true
-                elseif not pieces[i] then
-                    return false
-                end
+        for i = 1, 32 do
+            if  pieces[i] and 
+                pieces[i]:checkCoordinates(xf, yf) and 
+                pieces[pressed]:canCapture(movement) and 
+                pressed ~= i then
+                return true
+            elseif not pieces[i] then
+                return false
             end
-        --end
+        end
         return false
     end
     return true
@@ -115,8 +113,8 @@ end
 function Game:checkPieceToBeCaptured(pieces, movement, pressed, hasSpecialMove)
     xf,yf = movement:getEnd();
     for i = 1, 32 do
-        if  pieces[i] and 
-            pressed ~= i and 
+        if  pieces[i] and
+            pressed ~= i and
             pieces[i]:checkCoordinates(xf, yf) then
             pieces[i]:toBeCaptured(true)
             return pieces[i]
@@ -139,7 +137,6 @@ function Game:showCurrentTurn(current)
     else
         love.graphics.print("Current Turn: Black", 670, 50)
     end
-    
 end
 
 --[[function Game:canPieceCapture(piece, otherPiece, pieces)

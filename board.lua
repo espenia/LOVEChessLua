@@ -149,12 +149,8 @@ function Board:revertLastMove()
 end
 
 function Board:removeCapturedPiece(piece)
-    local index={}
-    for k,v in pairs(pieces) do
-       index[v]=k
-    end
-    index1 = index[piece]
-    table.remove(self:getPieces(), index1)
+    index = self:getIndexFrom(piece, self:getPieces())
+    table.remove(self:getPieces(), index)
 end
 
 function Board:isNewMove()
@@ -188,4 +184,12 @@ function Board:getKing(color)
             end
         end
     end
+end
+
+function Board:getIndexFrom(value, table)
+    local index={}
+    for k,v in pairs(table) do
+       index[v]=k
+    end
+    return index[value]
 end

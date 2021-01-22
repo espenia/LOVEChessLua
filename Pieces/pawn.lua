@@ -16,11 +16,17 @@ function Pawn:validateMovement(movement)
     xo,yo = movement:getStart()
     xf,yf = movement:getEnd()
 
-    if  (xo == xf) and
+    if  not self.firstMove and
+        (xo == xf) and
         ((yf - yo == 1 and self.color == 'w') or
         (yf - yo == -1 and self.color == 'b')) then
         return true
-    else
+    elseif  self.firstMove and
+            (xo == xf) and
+            (((yf - yo == 1 or yf - yo == 2) and self.color == 'w') or
+            ((yf - yo == -1 or yf - yo == -2) and self.color == 'b')) then
+        return true
+    else    
         return false
     end
 end   
