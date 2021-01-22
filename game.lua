@@ -12,8 +12,6 @@ end
 function Game:setTurn(color)
     self.turn = color
 end
-
-
     
 function Game:validateMove(pieces, pressed, lastMove, board)
     if pieces[pressed]:getColor() ==  self.turn then
@@ -24,7 +22,7 @@ function Game:validateMove(pieces, pressed, lastMove, board)
             --     return true
             -- end
 
-            capturedPiece = self:checkPieceToBeCaptured(pieces, lastMove, pressed, false)
+            capturedPiece = self:checkPieceToBeCaptured(pieces, lastMove, pressed)
 
             if capturedPiece then
                 pieces[pressed]:updatePos(lastMove)
@@ -110,7 +108,7 @@ function Game:checkMovement(pieces, color, movement, pressed)
     return true
 end
 
-function Game:checkPieceToBeCaptured(pieces, movement, pressed, hasSpecialMove)
+function Game:checkPieceToBeCaptured(pieces, movement, pressed)
     xf,yf = movement:getEnd();
     for i = 1, 32 do
         if  pieces[i] and

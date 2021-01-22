@@ -56,8 +56,6 @@ function Board:updateAll()
     end
 end
 
-
-
 function Board:draw()
     self:drawBackground()
     for i = 1, #self.pieces do
