@@ -154,7 +154,7 @@ function Board:removeCapturedPiece(piece)
        index[v]=k
     end
     index1 = index[piece]
-    table.remove(pieces, index1)
+    table.remove(self:getPieces(), index1)
 end
 
 function Board:isNewMove()

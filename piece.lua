@@ -150,3 +150,7 @@ end
 function Piece:getActualPos()
     return self.actualPos:get()
 end
+
+function Piece:canCapture()
+    return true
+end

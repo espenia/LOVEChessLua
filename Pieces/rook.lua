@@ -26,7 +26,7 @@ function Rook:validateMovement(movement)
     end
 end 
 
-function Rook:checkTrajectory( x, y, xf, yf, xo,yo)
+function Rook:checkTrajectory(x, y, xf, yf, xo, yo)
 
     if  (yo < y and y < yf and x == xo) or
         (xo < x and x < xf and y == yo) or

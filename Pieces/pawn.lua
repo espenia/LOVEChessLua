@@ -15,6 +15,7 @@ end
 function Pawn:validateMovement(movement)
     xo,yo = movement:getStart()
     xf,yf = movement:getEnd()
+
     if  (xo == xf) and
         ((yf - yo == 1 and self.color == 'w') or
         (yf - yo == -1 and self.color == 'b')) then
@@ -24,6 +25,19 @@ function Pawn:validateMovement(movement)
     end
 end   
 
-function Pawn:checkTrajectory(x, y, xf, yf, xo,yo)
+function Pawn:canCapture(movement)
+    xo,yo = movement:getStart()
+    xf,yf = movement:getEnd()
+
+    if  (xf - xo == 1 or xf - xo == -1) and
+        ((yf - yo == 1 and self.color == 'w') or
+        (yf - yo == -1 and self.color == 'b')) then
+        return true
+    else
+        return false
+    end
+end
+
+function Pawn:checkTrajectory(x, y, xf, yf, xo, yo)
     return false;
 end
