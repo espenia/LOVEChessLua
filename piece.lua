@@ -151,6 +151,6 @@ function Piece:getActualPos()
     return self.actualPos:get()
 end
 
-function Piece:canCapture()
-    return true
+function Piece:canCapture(movement)
+    return self:validateMovement(movement)
 end

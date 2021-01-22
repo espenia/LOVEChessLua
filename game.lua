@@ -95,14 +95,18 @@ function Game:checkMovement(pieces, color, movement, pressed)
             end
         end
     else
-        for i = 1, 32 do
-            if pieces[i] and pieces[i]:checkCoordinates(xf, yf) and 
-                pieces[pressed]:canCapture(movement) and pressed ~= i then
-                return true
-            elseif not pieces[i] then
-                return false
+        --if pieces[pressed]:getName() == "pawn" then
+            for i = 1, 32 do
+                if  pieces[i] and 
+                    pieces[i]:checkCoordinates(xf, yf) and 
+                    pieces[pressed]:canCapture(movement) and 
+                    pressed ~= i then
+                    return true
+                elseif not pieces[i] then
+                    return false
+                end
             end
-        end
+        --end
         return false
     end
     return true
