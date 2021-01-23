@@ -56,8 +56,6 @@ function Board:updateAll()
     end
 end
 
-
-
 function Board:draw()
     self:drawBackground()
     for i = 1, #self.pieces do
@@ -69,6 +67,8 @@ function Board:draw()
     if self.pressed ~= -1 then
         self.pieces[self.pressed]:draw()
         love.graphics.print(self.pieces[self.pressed]:getName(), 0, 50)
+        local x,y = self.pieces[self.pressed]:getActualPos()
+        love.graphics.print(x..y , 0, 90)
     end
 end
 
@@ -148,7 +148,9 @@ function Board:revertLastMove()
     self.newMove = false
 end
 
-function Board:removeCapturedPiece()
+function Board:removeCapturedPiece(piece)
+    index = self:getIndexFrom(piece, self:getPieces())
+    table.remove(self:getPieces(), index)
 end
 
 function Board:isNewMove()
@@ -182,4 +184,12 @@ function Board:getKing(color)
             end
         end
     end
+end
+
+function Board:getIndexFrom(value, table)
+    local index={}
+    for k,v in pairs(table) do
+       index[v]=k
+    end
+    return index[value]
 end

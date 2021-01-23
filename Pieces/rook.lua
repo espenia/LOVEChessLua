@@ -18,15 +18,15 @@ end
 function Rook:validateMovement(movement)
     xo,yo = movement:getStart()
     xf,yf = movement:getEnd()
-    if  (xo == xf) or 
-        (yo == yf) then
+    if  (xo == xf and yo ~= yf and xo ~= nil) or 
+        (yo == yf and xo ~= xf and yo ~= nil) then
         return true
     else
         return false
     end
 end 
 
-function Rook:checkTrajectory( x, y, xf, yf, xo,yo)
+function Rook:checkTrajectory(x, y, xf, yf, xo, yo)
 
     if  (yo < y and y < yf and x == xo) or
         (xo < x and x < xf and y == yo) or

@@ -19,10 +19,20 @@ function Piece:new(color, x, y, gridSize, xOffset, yOffset, posX, posY)
     self.drawOffset = 5
     self.actualPos = Square()
     self.actualPos:set(posX, posY)
+    self.captured = false
+    self.firstMove = true
 end
 
 function Piece:getColor()
     return self.color
+end
+
+function Piece:toBeCaptured(toBeCaptured)
+    self.captured = toBeCaptured
+end
+
+function Piece:isCaptured()
+    return self.captured
 end
 
 -- function Piece:setColor(i)
@@ -33,9 +43,10 @@ end
 --     end
 -- end
 
-function Piece:move(x, y)
-    self.x = x * self.gridSize + self.xOffset + (self.gridSize - self.width) / 2
-    self.y = y * self.gridSize + self.yOffset + (self.gridSize - self.height) / 2
+function Piece:move(xd, yd)
+    self.x = xd * self.gridSize + self.xOffset + (self.gridSize - self.width) / 2
+    self.y = yd * self.gridSize + self.yOffset + (self.gridSize - self.height) / 2
+    self.actualPos:set(xd,yd)
 end
 
 function Piece:update(dt)
@@ -112,13 +123,14 @@ end
 function Piece:updatePos(lastMove)
     xf,yf = lastMove:getEnd()
     self.actualPos:set(xf,yf)
+    self.firstMove = false
 end
 
 function Piece:getColor()
     return self.color
 end
 
-function Piece:checkPos( colorf, xf, yf)
+function Piece:checkPos(colorf, xf, yf)
     myX, myY = self.actualPos:get();
 
     if myX == xf and myY == yf and self.color == colorf then
@@ -128,6 +140,20 @@ function Piece:checkPos( colorf, xf, yf)
     end
 end
 
+function Piece:checkCoordinates(xf, yf)
+    myX, myY = self.actualPos:get();
+
+    if myX == xf and myY == yf then
+        return true
+    else
+        return false
+    end
+end
+
 function Piece:getActualPos()
     return self.actualPos:get()
+end
+
+function Piece:canCapture(movement)
+    return self:validateMovement(movement)
 end
