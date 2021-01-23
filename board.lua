@@ -67,6 +67,8 @@ function Board:draw()
     if self.pressed ~= -1 then
         self.pieces[self.pressed]:draw()
         love.graphics.print(self.pieces[self.pressed]:getName(), 0, 50)
+        local x,y = self.pieces[self.pressed]:getActualPos()
+        love.graphics.print(x..y , 0, 90)
     end
 end
 

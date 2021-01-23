@@ -15,44 +15,45 @@ end
     
 function Game:validateMove(pieces, pressed, lastMove, board)
     if pieces[pressed]:getColor() ==  self.turn then
-        king = board:getKing(self.turn)
+        local king = board:getKing(self.turn)
+
         if  self:checkMovement(pieces, pieces[pressed]:getColor(), lastMove, pressed) then
-            -- if -self:isKingInCheck(king, pieces) then
-            --     pieces[pressed]:updatePos(lastMove)
-            --     return true
-            -- end
-
-            capturedPiece = self:checkPieceToBeCaptured(pieces, lastMove, pressed)
-
-            if capturedPiece then
+            if not self:isKingInCheck(king, pieces) then
+                local capturedPiece = self:checkPieceToBeCaptured(pieces, lastMove, pressed)
                 pieces[pressed]:updatePos(lastMove)
-                board:removeCapturedPiece(capturedPiece)
-                self:resetCapturedFlags()
+                if self:isKingInCheck(king, pieces) then
+                    self:resetCapturedFlags()
+                    return false
+                else
+                    if capturedPiece then
+                        board:removeCapturedPiece(capturedPiece)
+                        self:resetCapturedFlags()
+                    end
+                    return true
+                end
+                
             else
+                local capturedPiece = self:checkPieceToBeCaptured(pieces, lastMove, pressed)
+                if capturedPiece then
+                    board:removeCapturedPiece(capturedPiece)
+                    self:resetCapturedFlags()
+                end
+                --pieces = board:getPieces()
                 pieces[pressed]:updatePos(lastMove)
+                if self:isKingInCheck(king, pieces) then
+                    if capturedPiece then
+                        board:addPiece(capturedPiece)
+                    end
+                    return false
+                end
+                return true
+                
             end
-            return true
-        else
-            return false
         end
     end
     return false
 end
 
---[[function isKingInCheck(king, pieces)
-    local opponent = "w"
-    if self.turn == "w" then
-        opponent = "b"
-    else
-        opponent = "w"
-    end
-    for key, piece in pairs(pieces) do
-        if piece:getColor() == opponent and self:canPieceCapture(piece, king, pieces) then
-            return true
-        end
-    end
-    return false
-end]]--
 
 function Game:nextTurn()
     if game:getTurn() == "w" then
@@ -69,13 +70,13 @@ function Game:checkmated()
 end
 
 function Game:checkMovement(pieces, color, movement, pressed)
-    xf,yf = movement:getEnd();
-    xo,yo = movement:getStart();
+    local xf,yf = movement:getEnd();
+    local xo,yo = movement:getStart();
 
     if (pieces[pressed]:validateMovement(movement)) then
-        for i = 1, 32 do
+        for i = 1, self:getArraySize(pieces)  do
             if (pieces[i]) then
-                x,y = pieces[i]:getActualPos()
+                local x,y = pieces[i]:getActualPos()
                 if  pieces[pressed]:checkTrajectory(x, y, xf, yf, xo, yo) and
                     pressed ~= i then
                     return false
@@ -93,8 +94,8 @@ function Game:checkMovement(pieces, color, movement, pressed)
             end
         end
     else
-        for i = 1, 32 do
-            if  pieces[i] and 
+        for i = 1, self:getArraySize(pieces) do
+            if  pieces[i] and
                 pieces[i]:checkCoordinates(xf, yf) and 
                 pieces[pressed]:canCapture(movement) and 
                 pressed ~= i then
@@ -108,11 +109,35 @@ function Game:checkMovement(pieces, color, movement, pressed)
     return true
 end
 
+
+function Game:isKingInCheck(king, pieces)
+    local opponent = "w"
+    if self.turn == "w" then
+        opponent = "b"
+    else
+        opponent = "w"
+    end
+    for i = 1, self:getArraySize(pieces) do
+        if pieces[i]:getColor() == opponent and self:canPieceCapture(i, king, pieces) then
+            return true
+        end
+    end
+    -- for key, piece in pairs(pieces) do
+    --     if piece:getColor() == opponent and self:canPieceCapture(piece, king, pieces) then
+    --         return true
+    --     end
+    -- end
+    return false
+end
+
+
+
 function Game:checkPieceToBeCaptured(pieces, movement, pressed)
-    xf,yf = movement:getEnd();
-    for i = 1, 32 do
+    local xf,yf = movement:getEnd();
+    for i = 1, self:getArraySize(pieces) do
         if  pieces[i] and
             pressed ~= i and
+            pieces[i]:getName() ~= "king" and
             pieces[i]:checkCoordinates(xf, yf) then
             pieces[i]:toBeCaptured(true)
             return pieces[i]
@@ -121,8 +146,22 @@ function Game:checkPieceToBeCaptured(pieces, movement, pressed)
     return false
 end
 
+
+function Game:canPieceCapture(pressed, otherPiece, pieces)
+    local movement = Move()
+    local xo,yo = pieces[pressed]:getActualPos()
+    local xf,yf = otherPiece:getActualPos()
+    movement:startMove(xo, yo, pieces[pressed]:getName())
+    movement:endMove(xf, yf)
+    if self:checkMovement(pieces, pieces[pressed]:getColor(), movement, pressed) then
+        return true
+    end
+    return false
+
+end
+
 function Game:resetCapturedFlags()
-    for i = 1, 32 do
+    for i = 1, self:getArraySize(pieces) do
         if  pieces[i] then
             pieces[i]:toBeCaptured(false)
         end
@@ -137,31 +176,11 @@ function Game:showCurrentTurn(current)
     end
 end
 
---[[function Game:canPieceCapture(piece, otherPiece, pieces)
-    local xf,yf = otherPiece:getChessPos();
-    local xo,yo = piece:getChessPos();
-    local movement = Move()
-    if piece:validateMovement(movement) then
-        if -piece:checkTrajectory(xf, yf, xf, yf, xo, yo) then --puede estar mal
-            return false
-        end
-
-        for i = 1, 32 do
-            local x,y = pieces[i]:getActualPos()
-            if i == otherPiece then
-                goto continue
-            end
-            if  piece:checkTrajectory(x, y, xf, yf, xo,yo) and
-                piece ~= i then
-                return false
-            end
-            if  pieces[i]:checkPos(piece:getColor(), xf, yf) and
-                piece ~= i then
-                return false
-            end
-            ::continue::
-        end
-        return true
+function Game:getArraySize(array)
+    i = 0
+    for key, value in pairs(array) do
+        i = i + 1
     end
-    return false
-end]]--
+    return i
+end
+

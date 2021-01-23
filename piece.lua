@@ -43,9 +43,10 @@ end
 --     end
 -- end
 
-function Piece:move(x, y)
-    self.x = x * self.gridSize + self.xOffset + (self.gridSize - self.width) / 2
-    self.y = y * self.gridSize + self.yOffset + (self.gridSize - self.height) / 2
+function Piece:move(xd, yd)
+    self.x = xd * self.gridSize + self.xOffset + (self.gridSize - self.width) / 2
+    self.y = yd * self.gridSize + self.yOffset + (self.gridSize - self.height) / 2
+    self.actualPos:set(xd,yd)
 end
 
 function Piece:update(dt)
