@@ -9,7 +9,6 @@ function King:new(color, x, y, gridSize, xOffset, yOffset, posX, posY)
     end
     self.super.new(self, color, x, y, gridSize, xOffset, yOffset, posX, posY)
     self.name = "king"
-    self.possibleCastling = true
     self.castlingSide = 0
 end
 
@@ -31,11 +30,9 @@ function King:validateMovement(movement)
         (deltaX == 1 and deltaY == -1) or
         (deltaX == -1 and deltaY == 1) or
         (deltaX == -1 and deltaY == -1) then
-        -- self.possibleCastling = false
         return true
     elseif ((deltaX == 2 or deltaX == -2) and deltaY == 0) and
             self.firstMove == true then
-        --if this:kingCastling( deltaX ) then
             self.castlingInProcess = true
             if deltaX == -2 then
                 self.castlingSide = 1
