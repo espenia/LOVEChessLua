@@ -21,6 +21,7 @@ function Piece:new(color, x, y, gridSize, xOffset, yOffset, posX, posY)
     self.actualPos:set(posX, posY)
     self.captured = false
     self.firstMove = true
+    self.castlingInProcess = false
 end
 
 function Piece:getColor()
@@ -156,4 +157,16 @@ end
 
 function Piece:canCapture(movement)
     return self:validateMovement(movement)
+end
+
+function Piece:getCastlingInProcess()
+    return self.castlingInProcess
+end
+
+function Piece:setClicked()
+    self.clicked = true
+end
+
+function Piece:checkPossibleCasteling(pieces, pressed, size)
+    
 end
