@@ -29,6 +29,10 @@ function Game:validateMove(pieces, pressed, lastMove, board)
                         board:removeCapturedPiece(capturedPiece)
                         self:resetCapturedFlags()
                     end
+                    if pieces[pressed]:checkPossibleCasteling(pieces, board , self:getArraySize(pieces)) == false then
+                        return false
+                    end
+                --si es falso debería revertir el movimiento
                     return true
                 end
                 
@@ -85,7 +89,7 @@ function Game:checkMovement(pieces, color, movement, pressed)
                     pressed ~= i then
                     return false
                 end
-
+                
                 if  pieces[i]:checkCoordinates(xf, yf) and
                     not pieces[pressed]:canCapture(movement) and
                     pressed ~= i then
