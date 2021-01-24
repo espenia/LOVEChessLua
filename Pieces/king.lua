@@ -31,10 +31,10 @@ function King:validateMovement(movement)
         (deltaX == 1 and deltaY == -1) or
         (deltaX == -1 and deltaY == 1) or
         (deltaX == -1 and deltaY == -1) then
-        self.possibleCastling = false
+        -- self.possibleCastling = false
         return true
     elseif ((deltaX == 2 or deltaX == -2) and deltaY == 0) and
-            self.possibleCastling == true then
+            self.firstMove == true then
         --if this:kingCastling( deltaX ) then
             self.castlingInProcess = true
             if deltaX == -2 then
@@ -63,25 +63,24 @@ function King:checkPossibleCasteling(pieces, board, size)
     
     if self.castlingInProcess == true then
         for i = 1, size do
-            if pieces[i]:getName() == "rook" then
+            if pieces[i]:getName() == "rook" and pieces[i]:getColor() == self.color then
                 local x,y,castelingOK = pieces[i]:checkRookCasteling(self.castlingSide)
                 if castelingOK then
                     local xo,yo = pieces[i]:getActualPos()
                     for j = 1, size do
                         local xp,yp = pieces[j]:getActualPos()
                             if pieces[i]:checkTrajectory(xp, yp, x, y, xo, yo) == true and pieces[j]:getName() ~= "king" then
+                                self.castlingInProcess = false
                                 return false     
                             end
                     end
                     pieces[i]:move(x,y)
+                    self.castlingInProcess = false
                     return true   
-                    --pieces[i]:setClicked()
-                    
-                    --board.lastMove:endMove(x,y)
-                    -- return true
                 end    
             end
         end
     end
-    return false
+    self.castlingInProcess = false
+    return true
 end

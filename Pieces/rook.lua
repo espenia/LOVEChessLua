@@ -50,9 +50,9 @@ function Rook:checkRookCasteling(side)
             return 0,0,false
         end
     elseif self.color == "b" and self.firstMove == true then
-        if side == 1 and actualXPos == 8 and actualYPos == 8 then
+        if side == 1 and actualXPos == 7 and actualYPos == 7 then
             return 4,7,true
-        elseif side == -1 and actualXPos == 1 and actualYPo == 8 then
+        elseif side == -1 and actualXPos == 0 and actualYPos == 7 then
             return 2,7,true
         else
             return 0,0,false
