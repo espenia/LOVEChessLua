@@ -26,57 +26,27 @@ function Board:new()
     self.pressedPromotion = -1
 end
 
-function Board:update(dt)
+function Board:update(dt, turn)
     if self.pressed ~= -1 then
         self:updatePressed()
     end
     if self.pressed == -1 then
         self:updateAll()
     end
+    if self.pressedPromotion ~= -1 then
+        self:updatePromotionPressed(turn)
+    else
+        self:updateAllPromotion()
+    end
 end
 
 function Board:updatePressed()
     self.pieces[self.pressed]:update()
-    local promotion = self.promotionPieces[self.pressedPromotion]
     if self.pieces[self.pressed].clicked == false then
         local x, y = self.pieces[self.pressed]:getChessPos()
         self.lastMove:endMove(x, y)
         self.pressed = -1
         self.newMove = true
-    end
-
-    if promotion == nil then
-        self.promotionPieces = {}
-        self.pressedPromotion = -1
-    else
-        for key, piece in pairs(pieces) do
-            local x,y = piece:getActualPos()
-            if piece:getColor() == "w"
-            and y == 7 and piece:getName() == "pawn" then
-                if promotion:getName() == "knight" then
-                    promotion:promotion(self.pieces, 0)
-                elseif promotion:getName() == "bishop" then
-                    promotion:promotion(self.pieces, 1)
-                elseif promotion:getName() == "rook" then
-                    promotion:promotion(self.pieces, 2)
-                elseif promotion:getName() == "queen" then
-                    promotion:promotion(self.pieces, 3)
-                end
-            elseif piece:getColor() == "b"
-            and y == 0 and piece:getName() == "pawn" then
-                if promotion:getName() == "knight" then
-                    promotion:promotion(self.pieces, 0)
-                elseif promotion:getName() == "bishop" then
-                    promotion:promotion(self.pieces, 1)
-                elseif promotion:getName() == "rook" then
-                    promotion:promotion(self.pieces, 2)
-                elseif promotion:getName() == "queen" then
-                    promotion:promotion(self.pieces, 3)
-                end
-            end
-        end
-        self.promotionPieces = {}
-        self.pressedPromotion = -1
     end
 end
 
@@ -92,6 +62,58 @@ function Board:updateAll()
         end
     end
 end
+
+
+function Board:updateAllPromotion()
+    for i = 1, #self.promotionPieces do
+        self.promotionPieces[i]:update()
+        if self.promotionPieces[i].clicked then
+            self.pressedPromotion = i
+            break
+        end
+    end
+end
+
+function Board:updatePromotionPressed(turn)
+    local promotion = self.promotionPieces[self.pressedPromotion]
+    if promotion == nil then
+        self.promotionPieces = {}
+        self.pressedPromotion = -1
+    else
+        for key, piece in pairs(pieces) do
+            local x,y = piece:getActualPos()
+            if piece:getColor() == "w" and piece:getColor() == turn
+            and y == 7 and piece:getName() == "pawn" then
+                if promotion:getName() == "knight" and promotion:isPressed() then
+                    piece:promotion(self.pieces, 0)
+                elseif promotion:getName() == "bishop" and promotion:isPressed() then
+                    piece:promotion(self.pieces, 1)
+                elseif promotion:getName() == "rook" and promotion:isPressed() then
+                    piece:promotion(self.pieces, 2)
+                elseif promotion:getName() == "queen" and promotion:isPressed() then
+                    piece:promotion(self.pieces, 3)
+                end
+                table.remove(pieces, key)
+            elseif piece:getColor() == "b" and piece:getColor() == turn
+            and y == 0 and piece:getName() == "pawn" then
+                if promotion:getName() == "knight" and promotion:isPressed() then
+                    piece:promotion(self.pieces, 0)
+                elseif promotion:getName() == "bishop" and promotion:isPressed() then
+                    piece:promotion(self.pieces, 1)
+                elseif promotion:getName() == "rook" and promotion:isPressed() then
+                    piece:promotion(self.pieces, 2)
+                elseif promotion:getName() == "queen" and promotion:isPressed() then
+                    piece:promotion(self.pieces, 3)
+                end
+                table.remove(pieces, key)
+            end
+            
+        end
+        self.promotionPieces = {}
+        self.pressedPromotion = -1
+    end
+end
+
 
 function Board:draw()
     self:drawBackground()
@@ -192,7 +214,7 @@ function Board:revertLastMove()
 end
 
 function Board:removeCapturedPiece(piece)
-    index = self:getIndexFrom(piece, self:getPieces())
+    local index = self:getIndexFrom(piece, self:getPieces())
     table.remove(self:getPieces(), index)
 end
 
@@ -246,7 +268,7 @@ function Board:promotion(pawn)
     local yOffset = self.yOffset
     local boardEnd = 8 * self.gridSize
     local knight, bishop, rook, queen
-
+    self.promotionPieces = {}
     if pawn:getColor() == "w" then
         knight = Knight(pawn:getColor(), boardEnd, boardEnd - step, step, xOffset, yOffset, 8, j)
         bishop = Bishop(pawn:getColor(),  boardEnd , boardEnd - 2 * step, step, xOffset, yOffset, 8, j + 1)
@@ -262,5 +284,4 @@ function Board:promotion(pawn)
     table.insert(self.promotionPieces, bishop)
     table.insert(self.promotionPieces, rook)
     table.insert(self.promotionPieces, queen)
-
 end

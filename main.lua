@@ -11,7 +11,7 @@ function love.load()
 end
 
 function love.update(dt)
-    board:update(dt)
+    board:update(dt, game:getTurn())
     if board:isNewMove() then
         if game:validateMove(board:getPieces(), board:getMoved(), board:getLastMove(), board) then
             game:nextTurn()

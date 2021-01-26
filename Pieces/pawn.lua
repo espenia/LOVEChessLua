@@ -77,7 +77,6 @@ function Pawn:promotion(board, i)
         return
     end
     local w,z = self.actualPos:get()
-    board:removeCapturedPiece(self)
     if i == 0 then
         board:addPiece(Bishop(self.color, self.x - (self.xOffset + (self.gridSize - self.width) / 2), self.y - (self.yOffset + (self.gridSize - self.height) / 2), self.gridSize, self.xOffset, self.yOffset, w, z))
     elseif i == 1 then

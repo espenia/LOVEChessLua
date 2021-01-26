@@ -99,12 +99,12 @@ function Piece:drag()
     local x,y = 0,0
     if self.clicked then
         x, y = love.mouse.getPosition()
-        if self:mouseOnBoard(x, y) then
+        --if self:mouseOnBoard(x, y) then
             x = math.floor((x - self.xOffset) / self.gridSize) * self.gridSize
             self.x = x + self.xOffset + (self.gridSize - self.width) / 2
             y = math.floor((y - self.yOffset) / self.gridSize) * self.gridSize
             self.y = y + self.yOffset + (self.gridSize - self.height) / 2
-        end
+        --end
     end
 end
 
