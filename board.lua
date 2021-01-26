@@ -22,6 +22,8 @@ function Board:new()
     self.imageScale = self.gridSize / self.imageDark:getWidth()
     self.lastMove = Move()
     self.newMove = false
+    self.promotionPieces = {}
+    self.pressedPromotion = -1
 end
 
 function Board:update(dt)
@@ -35,11 +37,46 @@ end
 
 function Board:updatePressed()
     self.pieces[self.pressed]:update()
+    local promotion = self.promotionPieces[self.pressedPromotion]
     if self.pieces[self.pressed].clicked == false then
         local x, y = self.pieces[self.pressed]:getChessPos()
         self.lastMove:endMove(x, y)
         self.pressed = -1
         self.newMove = true
+    end
+
+    if promotion == nil then
+        self.promotionPieces = {}
+        self.pressedPromotion = -1
+    else
+        for key, piece in pairs(pieces) do
+            local x,y = piece:getActualPos()
+            if piece:getColor() == "w"
+            and y == 7 and piece:getName() == "pawn" then
+                if promotion:getName() == "knight" then
+                    promotion:promotion(self.pieces, 0)
+                elseif promotion:getName() == "bishop" then
+                    promotion:promotion(self.pieces, 1)
+                elseif promotion:getName() == "rook" then
+                    promotion:promotion(self.pieces, 2)
+                elseif promotion:getName() == "queen" then
+                    promotion:promotion(self.pieces, 3)
+                end
+            elseif piece:getColor() == "b"
+            and y == 0 and piece:getName() == "pawn" then
+                if promotion:getName() == "knight" then
+                    promotion:promotion(self.pieces, 0)
+                elseif promotion:getName() == "bishop" then
+                    promotion:promotion(self.pieces, 1)
+                elseif promotion:getName() == "rook" then
+                    promotion:promotion(self.pieces, 2)
+                elseif promotion:getName() == "queen" then
+                    promotion:promotion(self.pieces, 3)
+                end
+            end
+        end
+        self.promotionPieces = {}
+        self.pressedPromotion = -1
     end
 end
 
@@ -61,6 +98,12 @@ function Board:draw()
     for i = 1, #self.pieces do
         if self.pressed ~= i then
             self.pieces[i]:draw()
+        end
+    end
+
+    for i = 1, #self.promotionPieces do
+        if self.pressed ~= i then
+            self.promotionPieces[i]:draw()
         end
     end
     -- draws pressed piece on top
@@ -192,4 +235,32 @@ function Board:getIndexFrom(value, table)
        index[v]=k
     end
     return index[value]
+end
+
+function Board:promotion(pawn)
+    local i,j = pawn:getActualPos()
+    -- local xPos = (2 * i - 2 + j % 2) * self.gridSize + self.xOffset
+    -- local yPos = (j - 1) * self.gridSize + self.yOffset
+    local step = self.gridSize
+    local xOffset = self.xOffset
+    local yOffset = self.yOffset
+    local boardEnd = 8 * self.gridSize
+    local knight, bishop, rook, queen
+
+    if pawn:getColor() == "w" then
+        knight = Knight(pawn:getColor(), boardEnd, boardEnd - step, step, xOffset, yOffset, 8, j)
+        bishop = Bishop(pawn:getColor(),  boardEnd , boardEnd - 2 * step, step, xOffset, yOffset, 8, j + 1)
+        rook = Rook(pawn:getColor(),  boardEnd , boardEnd - 3 * step, step, xOffset, yOffset, 8, j + 3)
+        queen = Queen(pawn:getColor(), boardEnd, boardEnd - 4 * step, step, xOffset, yOffset, 8, j + 3)
+    else
+        knight = Knight(pawn:getColor(), -step, 0, step, xOffset, yOffset, 8, j)
+        bishop = Bishop(pawn:getColor(), -step , step, step, xOffset, yOffset, 8, j + 1)
+        rook = Rook(pawn:getColor(), -step, 2 * step, step, xOffset, yOffset, 8, j + 3)
+        queen = Queen(pawn:getColor(), -step, 3 * step, step, xOffset, yOffset, 8, j + 3)
+    end
+    table.insert(self.promotionPieces, knight)
+    table.insert(self.promotionPieces, bishop)
+    table.insert(self.promotionPieces, rook)
+    table.insert(self.promotionPieces, queen)
+
 end

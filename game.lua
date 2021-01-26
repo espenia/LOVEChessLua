@@ -32,7 +32,6 @@ function Game:validateMove(pieces, pressed, lastMove, board)
                     if pieces[pressed]:checkPossibleCasteling(pieces, board , self:getArraySize(pieces)) == false then
                         return false
                     end
-                --si es falso debería revertir el movimiento
                     return true
                 end
                 
@@ -188,3 +187,17 @@ function Game:getArraySize(array)
     return i
 end
 
+
+function Game:isPawnPromotion(pieces , color)
+    for key, piece in pairs(pieces) do
+        local x,y = piece:getActualPos()
+        if piece:getColor() == "w" and piece:getColor() == color 
+        and y == 7 and piece:getName() == "pawn" then
+            return piece
+        elseif piece:getColor() == "b" and piece:getColor() == color
+        and y == 0 and piece:getName() == "pawn" then
+            return piece
+        end
+    end
+    return false
+end

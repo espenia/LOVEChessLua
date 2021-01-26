@@ -79,6 +79,7 @@ function Piece:draw()
     love.graphics.draw(self.image, self.x, self.y - lift, 0, self.widthScale, self.heightScale)
 end
 
+
 function Piece:isPressed()
     local delta = self.gridSize / 3.3
     if love.mouse.isDown(1) then
