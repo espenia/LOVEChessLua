@@ -37,3 +37,27 @@ function Rook:checkTrajectory(x, y, xf, yf, xo, yo)
         return false
     end
 end
+
+function Rook:checkRookCasteling(side)
+    local actualXPos, actualYPos = self.actualPos:get()
+
+    if self.color == "w" and self.firstMove == true then
+        if side == 1 and actualXPos == 7 and actualYPos == 0 then
+            return 4,0,true 
+        elseif side == -1 and actualXPos == 0 and actualYPos == 0 then
+            return 2,0,true
+        else
+            return 0,0,false
+        end
+    elseif self.color == "b" and self.firstMove == true then
+        if side == 1 and actualXPos == 7 and actualYPos == 7 then
+            return 4,7,true
+        elseif side == -1 and actualXPos == 0 and actualYPos == 7 then
+            return 2,7,true
+        else
+            return 0,0,false
+        end
+    else
+        return 0,0,false
+    end
+end
