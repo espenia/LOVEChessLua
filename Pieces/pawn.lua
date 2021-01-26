@@ -72,18 +72,18 @@ function Piece:new(color, x, y, gridSize, xOffset, yOffset, posX, posY)
 end
 
 
-function Pawn:promotion(board, i)
+function Pawn:promotion(pieces, i)
     if i == 4 then
         return
     end
     local w,z = self.actualPos:get()
     if i == 0 then
-        board:addPiece(Bishop(self.color, self.x - (self.xOffset + (self.gridSize - self.width) / 2), self.y - (self.yOffset + (self.gridSize - self.height) / 2), self.gridSize, self.xOffset, self.yOffset, w, z))
+        table.insert(pieces, Bishop(self.color, self.x - (self.xOffset + (self.gridSize - self.width) / 2), self.y - (self.yOffset + (self.gridSize - self.height) / 2), self.gridSize, self.xOffset, self.yOffset, w, z))
     elseif i == 1 then
-        board:addPiece(Knight(self.color, self.x - (self.xOffset + (self.gridSize - self.width) / 2), self.y - (self.yOffset + (self.gridSize - self.height) / 2), self.gridSize, self.xOffset, self.yOffset, w, z))
+        table.insert(pieces, Knight(self.color, self.x - (self.xOffset + (self.gridSize - self.width) / 2), self.y - (self.yOffset + (self.gridSize - self.height) / 2), self.gridSize, self.xOffset, self.yOffset, w, z))
     elseif i == 2 then
-        board:addPiece(Rook(self.color, self.x - (self.xOffset + (self.gridSize - self.width) / 2), self.y - (self.yOffset + (self.gridSize - self.height) / 2), self.gridSize, self.xOffset, self.yOffset, w, z))
+        table.insert(pieces, Rook(self.color, self.x - (self.xOffset + (self.gridSize - self.width) / 2), self.y - (self.yOffset + (self.gridSize - self.height) / 2), self.gridSize, self.xOffset, self.yOffset, w, z))
     elseif i == 3 then
-        board:addPiece(Queen(self.color, self.x - (self.xOffset + (self.gridSize - self.width) / 2), self.y - (self.yOffset + (self.gridSize - self.height) / 2), self.gridSize, self.xOffset, self.yOffset, w, z))
+        table.insert(pieces, Queen(self.color, self.x - (self.xOffset + (self.gridSize - self.width) / 2), self.y - (self.yOffset + (self.gridSize - self.height) / 2), self.gridSize, self.xOffset, self.yOffset, w, z))
     end
 end
