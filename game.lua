@@ -118,11 +118,11 @@ function Game:isKingInCheck(king, pieces)
     else
         opponent = "w"
     end
-    -- for i = 1, self:getArraySize(pieces) do
-    --     if pieces[i]:getColor() == opponent and self:canPieceCapture(i, king, pieces) then
-    --         return true
-    --     end
-    -- end
+    for i = 1, self:getArraySize(pieces) do
+        if pieces[i]:getColor() == opponent and self:canPieceCapture(i, king, pieces) then
+            return true
+        end
+    end
     -- for key, piece in pairs(pieces) do
     --     if piece:getColor() == opponent and self:canPieceCapture(piece, king, pieces) then
     --         return true
