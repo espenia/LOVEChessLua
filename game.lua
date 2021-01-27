@@ -16,7 +16,6 @@ end
 function Game:validateMove(pieces, pressed, lastMove, board)
     if pieces[pressed]:getColor() ==  self.turn then
         local king = board:getKing(self.turn)
-
         if  self:checkMovement(pieces, pieces[pressed]:getColor(), lastMove, pressed) then
             if not self:isKingInCheck(king, pieces) then
                 local capturedPiece = self:checkPieceToBeCaptured(pieces, lastMove, pressed)
@@ -26,6 +25,8 @@ function Game:validateMove(pieces, pressed, lastMove, board)
                     return false
                 else
                     if capturedPiece then
+                        print("voy a remover pieza")
+                        print(capturedPiece:getName())
                         board:removeCapturedPiece(capturedPiece)
                         self:resetCapturedFlags()
                     end
@@ -87,7 +88,7 @@ function Game:checkMovement(pieces, color, movement, pressed)
                 end
 
                 if  pieces[i]:checkCoordinates(xf, yf) and
-                    not pieces[pressed]:canCapture(movement) and
+                    not pieces[pressed]:canCapture(movement, pieces[i]) and
                     pressed ~= i then
                     return false
                 end
@@ -96,8 +97,8 @@ function Game:checkMovement(pieces, color, movement, pressed)
     else
         for i = 1, self:getArraySize(pieces) do
             if  pieces[i] and
-                pieces[i]:checkCoordinates(xf, yf) and 
-                pieces[pressed]:canCapture(movement) and 
+                -- pieces[i]:checkCoordinates(xf, yf) and 
+                pieces[pressed]:canCapture(movement, pieces[i]) and 
                 pressed ~= i then
                 return true
             elseif not pieces[i] then
@@ -117,11 +118,11 @@ function Game:isKingInCheck(king, pieces)
     else
         opponent = "w"
     end
-    for i = 1, self:getArraySize(pieces) do
-        if pieces[i]:getColor() == opponent and self:canPieceCapture(i, king, pieces) then
-            return true
-        end
-    end
+    -- for i = 1, self:getArraySize(pieces) do
+    --     if pieces[i]:getColor() == opponent and self:canPieceCapture(i, king, pieces) then
+    --         return true
+    --     end
+    -- end
     -- for key, piece in pairs(pieces) do
     --     if piece:getColor() == opponent and self:canPieceCapture(piece, king, pieces) then
     --         return true
@@ -141,6 +142,13 @@ function Game:checkPieceToBeCaptured(pieces, movement, pressed)
             pieces[i]:checkCoordinates(xf, yf) then
             pieces[i]:toBeCaptured(true)
             return pieces[i]
+        elseif  pieces[i] and
+                pressed ~= i and
+                pieces[i]:getName() == "pawn" and
+                pieces[pressed]:getName() == "pawn" and
+                pieces[i]:getEnPassant() then
+            pieces[i]:toBeCaptured(true)
+            return pieces[i]
         end
     end
     return false
@@ -157,13 +165,14 @@ function Game:canPieceCapture(pressed, otherPiece, pieces)
         return true
     end
     return false
-
 end
 
 function Game:resetCapturedFlags()
     for i = 1, self:getArraySize(pieces) do
         if  pieces[i] then
             pieces[i]:toBeCaptured(false)
+            pieces[i]:setEnPassant(false)
+            pieces[i]:setCanBeEnPassant(false)
         end
     end
 end
