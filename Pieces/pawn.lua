@@ -71,21 +71,18 @@ function Piece:new(color, x, y, gridSize, xOffset, yOffset, posX, posY)
     self.castlingInProcess = false
 end
 
-
-function Pawn:promotion(pieces, i)
-    if i == 4 then
-        return
-    end
+function Pawn:promotion(name)
     local w,z = self.actualPos:get()
-    local newX = w * self.gridSize
-    local newY = z * self.gridSize
-    if i == 0 then
-        table.insert(pieces, Bishop(self.color, newX, newY, self.gridSize, self.xOffset, self.yOffset, w, z))
-    elseif i == 1 then
-        table.insert(pieces, Knight(self.color, newX, newY, self.gridSize, self.xOffset, self.yOffset, w, z))
-    elseif i == 2 then
-        table.insert(pieces, Rook(self.color, newX, newY, self.gridSize, self.xOffset, self.yOffset, w, z))
-    elseif i == 3 then
-        table.insert(pieces, Queen(self.color, newX, newY, self.gridSize, self.xOffset, self.yOffset, w, z))
+    local newX, newY = w * self.gridSize, z * self.gridSize
+    local newPiece
+    if name == "bishop" then
+        newPiece = Bishop(self.color, newX, newY, self.gridSize, self.xOffset, self.yOffset, w, z)
+    elseif name == "knight" then
+        newPiece = Knight(self.color, newX, newY, self.gridSize, self.xOffset, self.yOffset, w, z)
+    elseif name == "rook" then
+        newPiece = Rook(self.color, newX, newY, self.gridSize, self.xOffset, self.yOffset, w, z)
+    elseif name == "queen" then
+        newPiece = Queen(self.color, newX, newY, self.gridSize, self.xOffset, self.yOffset, w, z)
     end
+    return newPiece
 end

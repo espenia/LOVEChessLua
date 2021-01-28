@@ -97,15 +97,8 @@ function Board:updatePromotionSelection(turn)
 end
 
 function Board:promotePawn(promotionSelected, pawn)
-    if promotionSelected:getName() == "knight" then
-        pawn:promotion(self.pieces, 0)
-    elseif promotionSelected:getName() == "bishop" then
-        pawn:promotion(self.pieces, 1)
-    elseif promotionSelected:getName() == "rook" then
-        pawn:promotion(self.pieces, 2)
-    elseif promotionSelected:getName() == "queen" then
-        pawn:promotion(self.pieces, 3)
-    end
+    local newPiece = pawn:promotion(promotionSelected:getName())
+    table.insert(self.pieces, newPiece)
 end
 
 function Board:spawnPromotionPieces(pawn)
