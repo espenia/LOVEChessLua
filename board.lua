@@ -59,7 +59,6 @@ function Board:updateAll()
     end
 end
 
-
 function Board:updateAllPromotion()
     for i = 1, #self.promotionPieces do
         self.promotionPieces[i]:update()
@@ -89,9 +88,6 @@ function Board:updatePromotionSelection(turn)
                 self:promotePawn(promotionSelected, piece)
                 table.remove(pieces, key)
             end
-            self.newPromotion = true
-            self.promotionPieces = {}
-            self.pressedPromotion = -1
         end
     end
 end
@@ -99,6 +95,9 @@ end
 function Board:promotePawn(promotionSelected, pawn)
     local newPiece = pawn:promotion(promotionSelected:getName())
     table.insert(self.pieces, newPiece)
+    self.newPromotion = true
+    self.promotionPieces = {}
+    self.pressedPromotion = -1
 end
 
 function Board:spawnPromotionPieces(pawn)
@@ -139,6 +138,7 @@ function Board:draw()
             self.promotionPieces[i]:draw()
         end
     end
+
     -- draws pressed piece on top
     if self.pressed ~= -1 then
         self.pieces[self.pressed]:draw()
@@ -233,9 +233,8 @@ function Board:isNewMove()
     if self.newMove then
         self.newMove = false
         return true
-    else
-        return false
     end
+    return false
 end
 
 function Board:getMoved()

@@ -14,7 +14,7 @@ function love.update(dt)
     board:update(dt, game:getTurn())
     if board:isNewMove() then
         local isValidMove = game:validateMove(board:getPieces(), board:getMoved(), board:getLastMove(), board)
-        if Board:isNotWaitingForPromotion() and isValidMove then
+        if board:isNotWaitingForPromotion() and isValidMove then
             local pawn = game:isPawnPromotion(board:getPieces(), game:getTurn())
             if pawn then
                 board:spawnPromotionPieces(pawn)
@@ -26,7 +26,7 @@ function love.update(dt)
         end
     end    
     if board:isNewPromotion() then
-       game:nextTurn()     
+        game:nextTurn()     
     end
 end
 
