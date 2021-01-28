@@ -36,12 +36,12 @@ function Game:validateMove(pieces, pressed, lastMove, board)
                 
             else
                 local capturedPiece = self:checkPieceToBeCaptured(pieces, lastMove, pressed)
+                pieces[pressed]:updatePos(lastMove)
                 if capturedPiece then
                     board:removeCapturedPiece(capturedPiece)
                     self:resetCapturedFlags()
                 end
                 --pieces = board:getPieces()
-                pieces[pressed]:updatePos(lastMove)
                 if self:isKingInCheck(king, pieces) then
                     if capturedPiece then
                         board:addPiece(capturedPiece)
