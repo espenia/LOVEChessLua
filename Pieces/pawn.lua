@@ -77,13 +77,14 @@ function Pawn:promotion(pieces, i)
         return
     end
     local w,z = self.actualPos:get()
+    local a,b = self.x, self.y
     if i == 0 then
-        table.insert(pieces, Bishop(self.color, self.x - (self.xOffset + (self.gridSize - self.width) / 2), self.y - (self.yOffset + (self.gridSize - self.height) / 2), self.gridSize, self.xOffset, self.yOffset, w, z))
+        table.insert(pieces, Bishop(self.color, self.x, self.y, self.gridSize, self.xOffset, self.yOffset, w, z))
     elseif i == 1 then
-        table.insert(pieces, Knight(self.color, self.x - (self.xOffset + (self.gridSize - self.width) / 2), self.y - (self.yOffset + (self.gridSize - self.height) / 2), self.gridSize, self.xOffset, self.yOffset, w, z))
+        table.insert(pieces, Knight(self.color, self.x, self.y, self.gridSize, self.xOffset, self.yOffset, w, z))
     elseif i == 2 then
-        table.insert(pieces, Rook(self.color, self.x - (self.xOffset + (self.gridSize - self.width) / 2), self.y - (self.yOffset + (self.gridSize - self.height) / 2), self.gridSize, self.xOffset, self.yOffset, w, z))
+        table.insert(pieces, Rook(self.color, self.x, self.y, self.gridSize, self.xOffset, self.yOffset, w, z))
     elseif i == 3 then
-        table.insert(pieces, Queen(self.color, self.x - (self.xOffset + (self.gridSize - self.width) / 2), self.y - (self.yOffset + (self.gridSize - self.height) / 2), self.gridSize, self.xOffset, self.yOffset, w, z))
+        table.insert(pieces, Queen(self.color, a, b, self.gridSize, self.xOffset, self.yOffset, w, z))
     end
 end

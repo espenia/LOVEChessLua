@@ -8,16 +8,26 @@ if pcall(require, "mobdebug") then require("mobdebug").start() end
 function love.load()
     game = Game()
     board = Board()
+    promoting = false
 end
 
 function love.update(dt)
     board:update(dt, game:getTurn())
     if board:isNewMove() then
-        if game:validateMove(board:getPieces(), board:getMoved(), board:getLastMove(), board) then
-            game:nextTurn()
+        if promoting == false and game:validateMove(board:getPieces(), board:getMoved(), board:getLastMove(), board) then
+                game:nextTurn()
         else
             board:revertLastMove()
         end
+    end
+    local pawn = game:isPawnPromotion(board:getPieces(), game:getTurn())
+    if pawn and promoting == false then
+        promoting = true
+        board:spawnPromotionPieces(pawn)
+    elseif pawn and promoting == true then
+        
+    else
+        promoting = false
     end
 end
 
@@ -48,10 +58,7 @@ function love.draw()
     --     love.graphics.print("black king is not in check", 10 , 300)
     -- end
 
-    local pawn = game:isPawnPromotion(board:getPieces(), game:getTurn())
-    if pawn then
-        board:promotion(pawn)
-    end
+
     board:draw()
 end
 
