@@ -77,14 +77,15 @@ function Pawn:promotion(pieces, i)
         return
     end
     local w,z = self.actualPos:get()
-    local a,b = self.x, self.y
+    local newX = w * self.gridSize
+    local newY = z * self.gridSize
     if i == 0 then
-        table.insert(pieces, Bishop(self.color, self.x, self.y, self.gridSize, self.xOffset, self.yOffset, w, z))
+        table.insert(pieces, Bishop(self.color, newX, newY, self.gridSize, self.xOffset, self.yOffset, w, z))
     elseif i == 1 then
-        table.insert(pieces, Knight(self.color, self.x, self.y, self.gridSize, self.xOffset, self.yOffset, w, z))
+        table.insert(pieces, Knight(self.color, newX, newY, self.gridSize, self.xOffset, self.yOffset, w, z))
     elseif i == 2 then
-        table.insert(pieces, Rook(self.color, self.x, self.y, self.gridSize, self.xOffset, self.yOffset, w, z))
+        table.insert(pieces, Rook(self.color, newX, newY, self.gridSize, self.xOffset, self.yOffset, w, z))
     elseif i == 3 then
-        table.insert(pieces, Queen(self.color, a, b, self.gridSize, self.xOffset, self.yOffset, w, z))
+        table.insert(pieces, Queen(self.color, newX, newY, self.gridSize, self.xOffset, self.yOffset, w, z))
     end
 end

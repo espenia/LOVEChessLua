@@ -89,13 +89,13 @@ function Board:updatePromotionSelection(turn)
             local x,y = piece:getActualPos()
             if piece:getColor() == "w" and piece:getColor() == turn
             and y == 7 and piece:getName() == "pawn" then
-                if promotion:getName() == "knight" and promotion.clicked then
+                if promotion:getName() == "knight" then
                     piece:promotion(self.pieces, 0)
-                elseif promotion:getName() == "bishop" and promotion.clicked then
+                elseif promotion:getName() == "bishop" then
                     piece:promotion(self.pieces, 1)
-                elseif promotion:getName() == "rook" and promotion.clicked then
+                elseif promotion:getName() == "rook" then
                     piece:promotion(self.pieces, 2)
-                elseif promotion:getName() == "queen" and promotion.clicked then
+                elseif promotion:getName() == "queen" then
                     piece:promotion(self.pieces, 3)
                 end
                 table.remove(pieces, key)
@@ -103,13 +103,13 @@ function Board:updatePromotionSelection(turn)
                 self.promotionPieces = {}
             elseif piece:getColor() == "b" and piece:getColor() == turn
             and y == 0 and piece:getName() == "pawn" then
-                if promotion:getName() == "knight" and promotion.clicked then
+                if promotion:getName() == "knight" then
                     piece:promotion(self.pieces, 0)
-                elseif promotion:getName() == "bishop" and promotion.clicked then
+                elseif promotion:getName() == "bishop" then
                     piece:promotion(self.pieces, 1)
-                elseif promotion:getName() == "rook" and promotion.clicked then
+                elseif promotion:getName() == "rook" then
                     piece:promotion(self.pieces, 2)
-                elseif promotion:getName() == "queen" and promotion.clicked then
+                elseif promotion:getName() == "queen" then
                     piece:promotion(self.pieces, 3)
                 end
                 table.remove(pieces, key)
