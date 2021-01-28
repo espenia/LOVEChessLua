@@ -168,5 +168,4 @@ function Piece:setClicked()
 end
 
 function Piece:checkPossibleCasteling(pieces, pressed, size)
-    
 end

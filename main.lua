@@ -33,6 +33,9 @@ end
 function love.draw()
     game:showCurrentTurn(game:getTurn())
 
+    love.graphics.print(board:getMoved(), 10, 100)
+    love.graphics.print(#board:getPieces(), 10, 150)
+
     -- local king = board:getKing("w")
     -- if king == nil then
     --     love.graphics.print("bum bum the white king is dead", 10, 100)

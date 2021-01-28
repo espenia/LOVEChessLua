@@ -85,8 +85,7 @@ function Board:updatePromotionSelection(turn)
         for key, piece in pairs(pieces) do
             local x, y = piece:getActualPos()
             if piece:getName() == "pawn" and (y == 7 or y == 0) then
-                self:promotePawn(promotionSelected, piece)
-                table.remove(pieces, key)
+                pieces[key] = self:promotePawn(promotionSelected, piece)
             end
         end
     end
@@ -94,10 +93,10 @@ end
 
 function Board:promotePawn(promotionSelected, pawn)
     local newPiece = pawn:promotion(promotionSelected:getName())
-    table.insert(self.pieces, newPiece)
     self.newPromotion = true
     self.promotionPieces = {}
     self.pressedPromotion = -1
+    return newPiece
 end
 
 function Board:spawnPromotionPieces(pawn)
