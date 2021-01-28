@@ -13,7 +13,6 @@ function Piece:new(color, x, y, gridSize, xOffset, yOffset, posX, posY)
     self.yOffset = yOffset
     self.x = x + self.xOffset + (self.gridSize - self.width) / 2
     self.y = y + self.yOffset + (self.gridSize - self.height) / 2
-    self.speed = 500
     self.clicked = false
     self.color = color
     self.drawOffset = 5

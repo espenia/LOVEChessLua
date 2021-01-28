@@ -10,7 +10,6 @@ require "move"
 Board = Object:extend()
 
 function Board:new()
-
     self.xOffset = 128
     self.yOffset = self.xOffset / 4
     self.gridSize = 67
@@ -82,89 +81,35 @@ end
 function Board:updatePromotionSelection(turn)
     self.newPromotion = false
     self:updateAllPromotion()
-    local promotion = self.promotionPieces[self.pressedPromotion]
-    if promotion ~= nil then
+    local promotionSelected = self.promotionPieces[self.pressedPromotion]
+    if promotionSelected ~= nil then
         for key, piece in pairs(pieces) do
-            local x,y = piece:getActualPos()
-            if piece:getColor() == "w" and piece:getColor() == turn
-            and y == 7 and piece:getName() == "pawn" then
-                if promotion:getName() == "knight" then
-                    piece:promotion(self.pieces, 0)
-                elseif promotion:getName() == "bishop" then
-                    piece:promotion(self.pieces, 1)
-                elseif promotion:getName() == "rook" then
-                    piece:promotion(self.pieces, 2)
-                elseif promotion:getName() == "queen" then
-                    piece:promotion(self.pieces, 3)
-                end
+            local x, y = piece:getActualPos()
+            if piece:getName() == "pawn" and (y == 7 or y == 0) then
+                self:promotePawn(promotionSelected, piece)
                 table.remove(pieces, key)
-                self.newPromotion = true
-                self.promotionPieces = {}
-                self.pressedPromotion = -1
-            elseif piece:getColor() == "b" and piece:getColor() == turn
-            and y == 0 and piece:getName() == "pawn" then
-                if promotion:getName() == "knight" then
-                    piece:promotion(self.pieces, 0)
-                elseif promotion:getName() == "bishop" then
-                    piece:promotion(self.pieces, 1)
-                elseif promotion:getName() == "rook" then
-                    piece:promotion(self.pieces, 2)
-                elseif promotion:getName() == "queen" then
-                    piece:promotion(self.pieces, 3)
-                end
-                table.remove(pieces, key)
-                self.newPromotion = true
-                self.promotionPieces = {}
-                self.pressedPromotion = -1
             end
+            self.newPromotion = true
+            self.promotionPieces = {}
+            self.pressedPromotion = -1
         end
     end
 end
 
-function Board:updatePromotionPressed(turn)
-    local promotion = self.promotionPieces[self.pressedPromotion]
-    if promotion == nil then
-        self.promotionPieces = {}
-        self.pressedPromotion = -1
-    else
-        for key, piece in pairs(pieces) do
-            local x,y = piece:getActualPos()
-            if piece:getColor() == "w" and piece:getColor() == turn
-            and y == 7 and piece:getName() == "pawn" then
-                if promotion:getName() == "knight" and promotion.clicked then
-                    piece:promotion(self.pieces, 0)
-                elseif promotion:getName() == "bishop" and promotion.clicked then
-                    piece:promotion(self.pieces, 1)
-                elseif promotion:getName() == "rook" and promotion.clicked then
-                    piece:promotion(self.pieces, 2)
-                elseif promotion:getName() == "queen" and promotion.clicked then
-                    piece:promotion(self.pieces, 3)
-                end
-                table.remove(pieces, key)
-            elseif piece:getColor() == "b" and piece:getColor() == turn
-            and y == 0 and piece:getName() == "pawn" then
-                if promotion:getName() == "knight" and promotion.clicked then
-                    piece:promotion(self.pieces, 0)
-                elseif promotion:getName() == "bishop" and promotion.clicked then
-                    piece:promotion(self.pieces, 1)
-                elseif promotion:getName() == "rook" and promotion.clicked then
-                    piece:promotion(self.pieces, 2)
-                elseif promotion:getName() == "queen" and promotion.clicked then
-                    piece:promotion(self.pieces, 3)
-                end
-                table.remove(pieces, key)
-            end
-            
-        end
-        self.promotionPieces = {}
-        self.pressedPromotion = -1
+function Board:promotePawn(promotionSelected, pawn)
+    if promotionSelected:getName() == "knight" then
+        pawn:promotion(self.pieces, 0)
+    elseif promotionSelected:getName() == "bishop" then
+        pawn:promotion(self.pieces, 1)
+    elseif promotionSelected:getName() == "rook" then
+        pawn:promotion(self.pieces, 2)
+    elseif promotionSelected:getName() == "queen" then
+        pawn:promotion(self.pieces, 3)
     end
 end
 
 function Board:spawnPromotionPieces(pawn)
     local i,j = pawn:getActualPos()
-    -- local xPos = (2 * i - 2 + j % 2) * self.gridSize + self.xOffset
-    -- local yPos = (j - 1) * self.gridSize + self.yOffset
     local step = self.gridSize
     local xOffset = self.xOffset
     local yOffset = self.yOffset

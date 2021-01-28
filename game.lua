@@ -2,7 +2,6 @@ Game = Object:extend()
 
 function Game:new()
     self.turn = "w"
-    self.checkstatus = "no"
 end
 
 function Game:getTurn()
