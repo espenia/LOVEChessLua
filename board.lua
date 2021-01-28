@@ -24,6 +24,7 @@ function Board:new()
     self.newMove = false
     self.promotionPieces = {}
     self.pressedPromotion = -1
+    self.newPromotion = false
 end
 
 function Board:update(dt, turn)
@@ -33,11 +34,12 @@ function Board:update(dt, turn)
     if self.pressed == -1 then
         self:updateAll()
     end
-    if self.pressedPromotion ~= -1 then
-        self:updatePromotionPressed(turn)
-    else
-        self:updateAllPromotion()
-    end
+    self:updatePromotionSelection(turn)
+    -- if self.pressedPromotion ~= -1 then
+    --     self:updatePromotionPressed(turn)
+    -- else
+    --     self:updateAllPromotion()
+    -- end
 end
 
 function Board:updatePressed()
@@ -70,6 +72,50 @@ function Board:updateAllPromotion()
         if self.promotionPieces[i].clicked then
             self.pressedPromotion = i
             break
+        end
+    end
+end
+
+function Board:isNewPromotion()
+    return self.newPromotion
+end
+
+function Board:updatePromotionSelection(turn)
+    self.newPromotion = false
+    self:updateAllPromotion()
+    local promotion = self.promotionPieces[self.pressedPromotion]
+    if promotion ~= nil then
+        for key, piece in pairs(pieces) do
+            local x,y = piece:getActualPos()
+            if piece:getColor() == "w" and piece:getColor() == turn
+            and y == 7 and piece:getName() == "pawn" then
+                if promotion:getName() == "knight" and promotion.clicked then
+                    piece:promotion(self.pieces, 0)
+                elseif promotion:getName() == "bishop" and promotion.clicked then
+                    piece:promotion(self.pieces, 1)
+                elseif promotion:getName() == "rook" and promotion.clicked then
+                    piece:promotion(self.pieces, 2)
+                elseif promotion:getName() == "queen" and promotion.clicked then
+                    piece:promotion(self.pieces, 3)
+                end
+                table.remove(pieces, key)
+                self.newPromotion = true
+                self.promotionPieces = {}
+            elseif piece:getColor() == "b" and piece:getColor() == turn
+            and y == 0 and piece:getName() == "pawn" then
+                if promotion:getName() == "knight" and promotion.clicked then
+                    piece:promotion(self.pieces, 0)
+                elseif promotion:getName() == "bishop" and promotion.clicked then
+                    piece:promotion(self.pieces, 1)
+                elseif promotion:getName() == "rook" and promotion.clicked then
+                    piece:promotion(self.pieces, 2)
+                elseif promotion:getName() == "queen" and promotion.clicked then
+                    piece:promotion(self.pieces, 3)
+                end
+                table.remove(pieces, key)
+                self.newPromotion = true
+                self.promotionPieces = {}
+            end
         end
     end
 end
@@ -114,6 +160,32 @@ function Board:updatePromotionPressed(turn)
     end
 end
 
+function Board:spawnPromotionPieces(pawn)
+    local i,j = pawn:getActualPos()
+    -- local xPos = (2 * i - 2 + j % 2) * self.gridSize + self.xOffset
+    -- local yPos = (j - 1) * self.gridSize + self.yOffset
+    local step = self.gridSize
+    local xOffset = self.xOffset
+    local yOffset = self.yOffset
+    local boardEnd = 8 * self.gridSize
+    local knight, bishop, rook, queen
+    self.promotionPieces = {}
+    if pawn:getColor() == "w" then
+        knight = Knight(pawn:getColor(), boardEnd, boardEnd - step, step, xOffset, yOffset, 8, j)
+        bishop = Bishop(pawn:getColor(),  boardEnd , boardEnd - 2 * step, step, xOffset, yOffset, 8, j + 1)
+        rook = Rook(pawn:getColor(),  boardEnd , boardEnd - 3 * step, step, xOffset, yOffset, 8, j + 3)
+        queen = Queen(pawn:getColor(), boardEnd, boardEnd - 4 * step, step, xOffset, yOffset, 8, j + 3)
+    else
+        knight = Knight(pawn:getColor(), -step, 0, step, xOffset, yOffset, 8, j)
+        bishop = Bishop(pawn:getColor(), -step , step, step, xOffset, yOffset, 8, j + 1)
+        rook = Rook(pawn:getColor(), -step, 2 * step, step, xOffset, yOffset, 8, j + 3)
+        queen = Queen(pawn:getColor(), -step, 3 * step, step, xOffset, yOffset, 8, j + 3)
+    end
+    table.insert(self.promotionPieces, knight)
+    table.insert(self.promotionPieces, bishop)
+    table.insert(self.promotionPieces, rook)
+    table.insert(self.promotionPieces, queen)
+end
 
 function Board:draw()
     self:drawBackground()
@@ -257,31 +329,4 @@ function Board:getIndexFrom(value, table)
        index[v]=k
     end
     return index[value]
-end
-
-function Board:spawnPromotionPieces(pawn)
-    local i,j = pawn:getActualPos()
-    -- local xPos = (2 * i - 2 + j % 2) * self.gridSize + self.xOffset
-    -- local yPos = (j - 1) * self.gridSize + self.yOffset
-    local step = self.gridSize
-    local xOffset = self.xOffset
-    local yOffset = self.yOffset
-    local boardEnd = 8 * self.gridSize
-    local knight, bishop, rook, queen
-    self.promotionPieces = {}
-    if pawn:getColor() == "w" then
-        knight = Knight(pawn:getColor(), boardEnd, boardEnd - step, step, xOffset, yOffset, 8, j)
-        bishop = Bishop(pawn:getColor(),  boardEnd , boardEnd - 2 * step, step, xOffset, yOffset, 8, j + 1)
-        rook = Rook(pawn:getColor(),  boardEnd , boardEnd - 3 * step, step, xOffset, yOffset, 8, j + 3)
-        queen = Queen(pawn:getColor(), boardEnd, boardEnd - 4 * step, step, xOffset, yOffset, 8, j + 3)
-    else
-        knight = Knight(pawn:getColor(), -step, 0, step, xOffset, yOffset, 8, j)
-        bishop = Bishop(pawn:getColor(), -step , step, step, xOffset, yOffset, 8, j + 1)
-        rook = Rook(pawn:getColor(), -step, 2 * step, step, xOffset, yOffset, 8, j + 3)
-        queen = Queen(pawn:getColor(), -step, 3 * step, step, xOffset, yOffset, 8, j + 3)
-    end
-    table.insert(self.promotionPieces, knight)
-    table.insert(self.promotionPieces, bishop)
-    table.insert(self.promotionPieces, rook)
-    table.insert(self.promotionPieces, queen)
 end
