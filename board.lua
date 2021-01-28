@@ -35,11 +35,6 @@ function Board:update(dt, turn)
         self:updateAll()
     end
     self:updatePromotionSelection(turn)
-    -- if self.pressedPromotion ~= -1 then
-    --     self:updatePromotionPressed(turn)
-    -- else
-    --     self:updateAllPromotion()
-    -- end
 end
 
 function Board:updatePressed()
@@ -80,6 +75,10 @@ function Board:isNewPromotion()
     return self.newPromotion
 end
 
+function Board:isNotWaitingForPromotion()
+    return self.promotionPieces == nil or next(self.promotionPieces) == nil
+end
+
 function Board:updatePromotionSelection(turn)
     self.newPromotion = false
     self:updateAllPromotion()
@@ -101,6 +100,7 @@ function Board:updatePromotionSelection(turn)
                 table.remove(pieces, key)
                 self.newPromotion = true
                 self.promotionPieces = {}
+                self.pressedPromotion = -1
             elseif piece:getColor() == "b" and piece:getColor() == turn
             and y == 0 and piece:getName() == "pawn" then
                 if promotion:getName() == "knight" then
@@ -115,6 +115,7 @@ function Board:updatePromotionSelection(turn)
                 table.remove(pieces, key)
                 self.newPromotion = true
                 self.promotionPieces = {}
+                self.pressedPromotion = -1
             end
         end
     end

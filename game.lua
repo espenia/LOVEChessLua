@@ -29,7 +29,7 @@ function Game:validateMove(pieces, pressed, lastMove, board)
                         board:removeCapturedPiece(capturedPiece)
                         self:resetCapturedFlags()
                     end
-                    if pieces[pressed]:checkPossibleCasteling(pieces, board , self:getArraySize(pieces)) == false then
+                    if pieces[pressed]:checkPossibleCasteling(pieces, board, self:getArraySize(pieces)) == false then
                         return false
                     end
                     return true

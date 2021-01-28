@@ -8,17 +8,15 @@ if pcall(require, "mobdebug") then require("mobdebug").start() end
 function love.load()
     game = Game()
     board = Board()
-    promoting = false
 end
 
 function love.update(dt)
     board:update(dt, game:getTurn())
     if board:isNewMove() then
         local isValidMove = game:validateMove(board:getPieces(), board:getMoved(), board:getLastMove(), board)
-        if (not promoting) and isValidMove then
+        if Board:isNotWaitingForPromotion() and isValidMove then
             local pawn = game:isPawnPromotion(board:getPieces(), game:getTurn())
             if pawn then
-                promoting = true
                 board:spawnPromotionPieces(pawn)
             else
                 game:nextTurn()
@@ -28,36 +26,8 @@ function love.update(dt)
         end
     end    
     if board:isNewPromotion() then
-       promoting = false
        game:nextTurn()     
     end
-
-    
-
-
-
-
-
-
-
-
-
-
-    --     local pawn = game:isPawnPromotion(board:getPieces(), game:getTurn())
-    --     if  then
-
-    --         if game:isPawnPromotion(board:getPieces(), game:getTurn())
-    --     else
-    --     end
-    -- end
-    -- local pawn = game:isPawnPromotion(board:getPieces(), game:getTurn())
-    -- if pawn and promoting == false then
-    --     promoting = true
-    -- elseif pawn and promoting == true then
-        
-    -- else
-    --     promoting = false
-    -- end
 end
 
 function love.draw()
