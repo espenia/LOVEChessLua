@@ -13,7 +13,6 @@ function Piece:new(color, x, y, gridSize, xOffset, yOffset, posX, posY)
     self.yOffset = yOffset
     self.x = x + self.xOffset + (self.gridSize - self.width) / 2
     self.y = y + self.yOffset + (self.gridSize - self.height) / 2
-    self.speed = 500
     self.clicked = false
     self.color = color
     self.drawOffset = 5
@@ -79,6 +78,7 @@ function Piece:draw()
     love.graphics.draw(self.image, self.x, self.y - lift, 0, self.widthScale, self.heightScale)
 end
 
+
 function Piece:isPressed()
     local delta = self.gridSize / 3.3
     if love.mouse.isDown(1) then
@@ -98,12 +98,12 @@ function Piece:drag()
     local x,y = 0,0
     if self.clicked then
         x, y = love.mouse.getPosition()
-        if self:mouseOnBoard(x, y) then
+        --if self:mouseOnBoard(x, y) then
             x = math.floor((x - self.xOffset) / self.gridSize) * self.gridSize
             self.x = x + self.xOffset + (self.gridSize - self.width) / 2
             y = math.floor((y - self.yOffset) / self.gridSize) * self.gridSize
             self.y = y + self.yOffset + (self.gridSize - self.height) / 2
-        end
+        --end
     end
 end
 
@@ -168,5 +168,4 @@ function Piece:setClicked()
 end
 
 function Piece:checkPossibleCasteling(pieces, pressed, size)
-    
 end

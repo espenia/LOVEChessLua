@@ -2,7 +2,6 @@ Game = Object:extend()
 
 function Game:new()
     self.turn = "w"
-    self.checkstatus = "no"
 end
 
 function Game:getTurn()
@@ -29,21 +28,20 @@ function Game:validateMove(pieces, pressed, lastMove, board)
                         board:removeCapturedPiece(capturedPiece)
                         self:resetCapturedFlags()
                     end
-                    if pieces[pressed]:checkPossibleCasteling(pieces, board , self:getArraySize(pieces)) == false then
+                    if pieces[pressed]:checkPossibleCasteling(pieces, board, self:getArraySize(pieces)) == false then
                         return false
                     end
-                --si es falso debería revertir el movimiento
                     return true
                 end
                 
             else
                 local capturedPiece = self:checkPieceToBeCaptured(pieces, lastMove, pressed)
+                pieces[pressed]:updatePos(lastMove)
                 if capturedPiece then
                     board:removeCapturedPiece(capturedPiece)
                     self:resetCapturedFlags()
                 end
                 --pieces = board:getPieces()
-                pieces[pressed]:updatePos(lastMove)
                 if self:isKingInCheck(king, pieces) then
                     if capturedPiece then
                         board:addPiece(capturedPiece)
@@ -188,3 +186,17 @@ function Game:getArraySize(array)
     return i
 end
 
+
+function Game:isPawnPromotion(pieces , color)
+    for key, piece in pairs(pieces) do
+        local x,y = piece:getActualPos()
+        if piece:getColor() == "w" and piece:getColor() == color 
+        and y == 7 and piece:getName() == "pawn" then
+            return piece
+        elseif piece:getColor() == "b" and piece:getColor() == color
+        and y == 0 and piece:getName() == "pawn" then
+            return piece
+        end
+    end
+    return false
+end
