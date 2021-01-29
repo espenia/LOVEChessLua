@@ -57,7 +57,16 @@ end
 function Piece:getChessPos()
     local x = math.floor((self.x - self.xOffset) / self.gridSize)
     local y = math.floor((self.y - self.yOffset) / self.gridSize)
-    return x,y
+    return x, y
+end
+
+function Piece:updatePositionOnResize(xOffset, yOffset, gridSize)
+    local x, y = self.actualPos:get()
+    self.xOffset = xOffset
+    self.yOffset = yOffset
+    self.gridSize = gridSize
+    self.x = x * gridSize + xOffset + (gridSize - self.width) / 2
+    self.y = y * gridSize + yOffset + (gridSize - self.height) / 2
 end
 
 function Piece:getName()

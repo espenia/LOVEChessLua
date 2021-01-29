@@ -28,6 +28,16 @@ function Board:new()
     self.newPromotion = false
 end
 
+function Board:updatePositionOnResize()
+    self.gridSize = love.graphics.getHeight() * 0.8 / self.tiles
+    self.imageScale = self.gridSize / self.imageDark:getWidth()
+    self.xOffset = (love.graphics.getWidth() - self.gridSize * self.tiles) / 2
+    self.yOffset = (love.graphics.getHeight() - self.gridSize * self.tiles) / 2
+    for key, piece in pairs(pieces) do
+        piece:updatePositionOnResize(self.xOffset, self.yOffset, self.gridSize)
+    end
+end
+
 function Board:update(dt, turn)
     if self.pressed ~= -1 then
         self:updatePressed()

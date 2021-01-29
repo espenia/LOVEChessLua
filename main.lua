@@ -86,3 +86,7 @@ function love.keypressed(key, u)
        debug.debug()
     end
  end
+
+function love.resize(w, h)
+    board:updatePositionOnResize()
+end
