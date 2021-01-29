@@ -22,6 +22,15 @@ function Menu:new(x, width, height, needsConfirm)
     self.confirmed = false
 end
 
+function Menu:center(x, y)
+    if x then
+        self.x = love.graphics.getWidth() / 2 - self.width / 2
+    end
+    if y then
+        self.y = love.graphics.getHeight() / 2 - self.height / 2
+    end
+end
+
 function Menu:drawBackground()
     local r, g, b, a = love.graphics.getColor()
     love.graphics.setColor(self.backgroundColor)
@@ -59,7 +68,6 @@ function Menu:draw()
     self:drawBackground()
     self:drawOptions()
     self:drawConfirmWindow()
-    love.graphics.print(self.currentSelected, 10, 500)
 end
 
 function Menu:drawConfirmWindow()

@@ -14,8 +14,14 @@ function Effect:particle()
     self.effect:setSpin(1, 2)
     self.effect:setEmissionArea('uniform', 4000, 0, 0, false)
     self.effect:setSizes(0.1, 0.1)
-    for i = 0, 5000 do
-        self.effect:update(1555)
+    self:particleSystemInAdvancedState()
+end
+
+--fast forward particle system
+function Effect:particleSystemInAdvancedState()
+    for i = 0, 500 do
+        self.effect:update(0.1)
+        self.effect:emit(1)
     end
 end
 
