@@ -63,7 +63,7 @@ function Menu:draw()
 end
 
 function Menu:drawConfirmWindow()
-    if self.confirmPopped then
+    if self.confirmPopped and self.currentSelected ~= 0 then
         self:drawBackgroundConfirmWindow()
         local request = self.options[self.currentSelected]
         local myFont = love.graphics.getFont()
@@ -144,7 +144,7 @@ function Menu:optionRequested()
             return self.options[self.currentSelected]
         end
     else
-        if love.keyboard.isDown('return') and self.currentSelected then
+        if love.keyboard.isDown('return') and self.currentSelected ~= 0 then
             self.confirmPopped = true and self.needsConfirm
         end
     end
