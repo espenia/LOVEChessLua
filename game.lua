@@ -19,6 +19,9 @@ function Game:validateMove(pieces, pressed, lastMove, board)
         if  self:checkMovement(pieces, pieces[pressed]:getColor(), lastMove, pressed) then
             if not self:isKingInCheck(king, pieces) then
                 local capturedPiece = self:checkPieceToBeCaptured(pieces, lastMove, pressed)
+                if pieces[pressed]:checkPossibleCasteling(pieces, board, self:getArraySize(pieces)) == false  then
+                    return false
+                end
                 pieces[pressed]:updatePos(lastMove)
                 if self:isKingInCheck(king, pieces) then
                     self:resetCapturedFlags()
@@ -28,9 +31,7 @@ function Game:validateMove(pieces, pressed, lastMove, board)
                         board:removeCapturedPiece(capturedPiece)
                         self:resetCapturedFlags()
                     end
-                    if pieces[pressed]:checkPossibleCasteling(pieces, board, self:getArraySize(pieces)) == false then
-                        return false
-                    end
+                    
                     return true
                 end
                 
