@@ -68,6 +68,10 @@ function Menu:draw()
     self:drawBackground()
     self:drawOptions()
     self:drawConfirmWindow()
+    if self.confirmPopped and self.confirmed then
+        self.confirmPopped = false
+        self.confirmed = false
+    end
 end
 
 function Menu:drawConfirmWindow()

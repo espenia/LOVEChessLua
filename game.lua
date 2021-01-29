@@ -13,6 +13,10 @@ function Game:startGame()
     self.status = "playing"
 end
 
+function Game:drawGame()
+    self.status = "draw"
+end
+
 function Game:getTurn()
     return self.turn
 end

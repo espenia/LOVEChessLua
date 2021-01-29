@@ -24,10 +24,12 @@ function love.load()
     startMenu = Menu(400, 100, 500, true)
     startMenu:setOptions({"start", "exit"}, true)
     startMenu:center(false, true)
+    drawTitle = Title("Draw", 0, 0, 100, true, 0.1)
+    drawTitle:center(true, true)
 end
 
 function love.update(dt)
-    if game:getStatus() ~= "main" then
+    if game:getStatus() == "playing" then
         board:update(dt, game:getTurn())
         if board:isNewMove() then
             local isValidMove = game:validateMove(board:getLastMove(), board)
@@ -50,15 +52,25 @@ function love.update(dt)
         if option == "restart" then
             love.event.quit( "restart" )
         elseif option == "draw" then
-            love.event.quit( "restart" )
+            game:drawGame()
         elseif option == "exit" then
             love.event.quit()
         end
-    else
+    elseif game:getStatus() == "main" then
         startMenu:updateSelection()
         local option = startMenu:optionRequested()
         if option == "start" then
             game:startGame()
+        elseif option == "exit" then
+            love.event.quit()
+        end
+    elseif game:getStatus() == "draw" then
+        ingameMenu:updateSelection()
+        local option = ingameMenu:optionRequested()
+        if option == "restart" then
+            love.event.quit( "restart" )
+        elseif option == "draw" then
+            game:drawGame()
         elseif option == "exit" then
             love.event.quit()
         end
@@ -68,7 +80,7 @@ end
 
 function love.draw()
     particles:particleDraw()
-    if game:getStatus() ~= "main" then
+    if game:getStatus() == "playing" then
         local menuX, menuY = ingameMenu:getMenuEnd()
         game:showCurrentTurn(game:getTurn(), menuX, menuY)
         love.graphics.print(board:getMoved(), 10, 100)
@@ -101,9 +113,14 @@ function love.draw()
         board:draw()
         ingameMenu:draw()
         title:draw()
-    else
+    elseif game:getStatus() == "main" then
         mainTitle:draw()
         startMenu:draw()
+    elseif game:getStatus() == "draw" then
+        board:draw()
+        title:draw()
+        drawTitle:draw()
+        ingameMenu:draw()
     end
 end
 
