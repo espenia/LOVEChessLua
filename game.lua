@@ -13,8 +13,6 @@ function Game:setTurn(color)
     self.turn = color
 end
 
-
-    
 function Game:validateMove(pieces, pressed,lastMove, board)
     if pieces[pressed]:getColor() ==  self.turn then
         king = board:getKing(self.turn)

@@ -10,7 +10,6 @@ require "move"
 Board = Object:extend()
 
 function Board:new()
-
     self.xOffset = 128
     self.yOffset = self.xOffset / 4
     self.gridSize = 67
