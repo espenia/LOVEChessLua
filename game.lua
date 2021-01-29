@@ -171,11 +171,11 @@ function Game:resetCapturedFlags()
     end
 end
 
-function Game:showCurrentTurn(current)
+function Game:showCurrentTurn(current, x, y)
     if current == "w" then
-        love.graphics.print("Turn: White", 695, 50)
+        love.graphics.print("Turn: White", x, y)
     else
-        love.graphics.print("Turn: Black", 695, 50)
+        love.graphics.print("Turn: Black", x, y)
     end
 end
 
