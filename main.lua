@@ -19,10 +19,11 @@ function love.load()
     ingameMenu = Menu(683, 100, 500, true)
     ingameMenu:setOptions({"restart", "draw", "exit"}, true)
     title = Title("LOVE \nChess \nLua", 40, 32, 20, true, 0.1)
-    mainTitle = Title("Love \nChess \nLua", 0, 0, 120, true, 0.1)
+    mainTitle = Title("Love \nChess \nLua", 0, 0, 100, true, 0.1)
     mainTitle:center(false, true)
-    startMenu = Menu(500, 100, 500, true)
+    startMenu = Menu(400, 100, 500, true)
     startMenu:setOptions({"start", "exit"}, true)
+    startMenu:center(false, true)
 end
 
 function love.update(dt)
@@ -122,4 +123,6 @@ function love.resize(w, h)
     ingameMenu:updateOnResize(x, y)
     x = (love.graphics.getWidth() - gridSize * initialTiles) / 2 - title:getBoxWidth() - 20 
     title:updateOnResize(x, y)
+    mainTitle:center(false, true)
+    startMenu:center(false, true)
 end
