@@ -10,7 +10,7 @@ function love.load()
     love.graphics.setBackgroundColor(51/255, 0/255, 17/255, 0)
     game = Game()
     board = Board()
-    ingameMenu = Menu(683, 80, 100, 500)
+    ingameMenu = Menu(683, 80, 100, 500, true)
     ingameMenu:setOptions({"restart", "draw", "exit"}, true)
 end
 
@@ -33,6 +33,14 @@ function love.update(dt)
         game:nextTurn()     
     end
     ingameMenu:updateSelection()
+    local option = ingameMenu:optionRequested()
+    if option == "restart" then
+        love.event.quit( "restart" )
+    elseif option == "draw" then
+        love.event.quit( "restart" )
+    elseif option == "exit" then
+        love.event.quit()
+    end
 end
 
 function love.draw()

@@ -173,9 +173,9 @@ end
 
 function Game:showCurrentTurn(current)
     if current == "w" then
-        love.graphics.print("Current Turn: White", 670, 50)
+        love.graphics.print("Turn: White", 695, 50)
     else
-        love.graphics.print("Current Turn: Black", 670, 50)
+        love.graphics.print("Turn: Black", 695, 50)
     end
 end
 
