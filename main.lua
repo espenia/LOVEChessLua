@@ -1,6 +1,8 @@
 Object = require "classic"
 require "board"
 require "game"
+require "menu"
+require "effect"
 
 if pcall(require, "lldebugger") then require("lldebugger").start() end
 if pcall(require, "mobdebug") then require("mobdebug").start() end
@@ -8,6 +10,10 @@ if pcall(require, "mobdebug") then require("mobdebug").start() end
 function love.load()
     game = Game()
     board = Board()
+    particles = Effect()
+    particles:particle()
+    ingameMenu = Menu(683, 80, 100, 500, true)
+    ingameMenu:setOptions({"restart", "draw", "exit"}, true)
 end
 
 function love.update(dt)
@@ -28,11 +34,21 @@ function love.update(dt)
     if board:isNewPromotion() then
         game:nextTurn()     
     end
+    ingameMenu:updateSelection()
+    local option = ingameMenu:optionRequested()
+    if option == "restart" then
+        love.event.quit( "restart" )
+    elseif option == "draw" then
+        love.event.quit( "restart" )
+    elseif option == "exit" then
+        love.event.quit()
+    end
+    particles:particleEmit(dt)
 end
 
 function love.draw()
+    particles:particleDraw()
     game:showCurrentTurn(game:getTurn())
-
     love.graphics.print(board:getMoved(), 10, 100)
     love.graphics.print(#board:getPieces(), 10, 150)
 
