@@ -12,7 +12,10 @@ function love.load()
     board = Board()
     particles = Effect()
     particles:particle()
-    ingameMenu = Menu(683, 80, 100, 500, true)
+    tiles = 8
+    boardWindowRatio = 0.8
+    gridSize = love.graphics.getHeight() * boardWindowRatio / tiles
+    ingameMenu = Menu(683, 100, 500, true)
     ingameMenu:setOptions({"restart", "draw", "exit"}, true)
 end
 
@@ -48,7 +51,8 @@ end
 
 function love.draw()
     particles:particleDraw()
-    game:showCurrentTurn(game:getTurn())
+    local menuX, menuY = ingameMenu:getMenuEnd()
+    game:showCurrentTurn(game:getTurn(), menuX, menuY)
     love.graphics.print(board:getMoved(), 10, 100)
     love.graphics.print(#board:getPieces(), 10, 150)
 
@@ -88,5 +92,7 @@ function love.keypressed(key, u)
  end
 
 function love.resize(w, h)
-    board:updateOnResize()
+    gridSize = love.graphics.getHeight() * boardWindowRatio / tiles
+    board:updateOnResize(boardWindowRatio)
+    ingameMenu:updateOnResize(gridSize, tiles)
 end

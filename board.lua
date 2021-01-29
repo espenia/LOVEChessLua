@@ -28,8 +28,8 @@ function Board:new()
     self.newPromotion = false
 end
 
-function Board:updateOnResize()
-    self.gridSize = love.graphics.getHeight() * 0.8 / self.tiles
+function Board:updateOnResize(windowFactor)
+    self.gridSize = love.graphics.getHeight() * windowFactor / self.tiles
     self.imageScale = self.gridSize / self.imageDark:getWidth()
     self.xOffset = (love.graphics.getWidth() - self.gridSize * self.tiles) / 2
     self.yOffset = (love.graphics.getHeight() - self.gridSize * self.tiles) / 2

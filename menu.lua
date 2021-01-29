@@ -1,9 +1,9 @@
 Menu = Object:extend()
 
-function Menu:new(x, y, width, height, needsConfirm)
-    self.x = x
-    self.y = y
+function Menu:new(x, width, height, needsConfirm)
     self.offset = 20
+    self.x = x
+    self.y = love.graphics.getHeight() * 0.05
     self.width = width
     self.height = height
     self.backgroundColor = {0, 0, 0, 0.2}
@@ -25,7 +25,7 @@ end
 function Menu:drawBackground()
     local r, g, b, a = love.graphics.getColor()
     love.graphics.setColor(self.backgroundColor)
-    love.graphics.rectangle("fill", self.x, self.y, self.width, self.height )
+    love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
     love.graphics.setColor(r, g, b, a)
 end
 
@@ -149,4 +149,15 @@ function Menu:optionRequested()
         end
     end
     return nil
+end
+
+function Menu:updateOnResize(gridSize, tiles)
+    self.x = (love.graphics.getWidth() + tiles * gridSize) / 2 + self.offset
+    self.y = love.graphics.getHeight() * 0.1
+end
+
+function Menu:getMenuEnd()
+    local x = self.x + self.offset / 2
+    local y = self.y + self.length * self.optionSpacing + 2.5 * self.offset
+    return x, y 
 end
