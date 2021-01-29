@@ -2,6 +2,15 @@ Game = Object:extend()
 
 function Game:new()
     self.turn = "w"
+    self.status = "main"
+end
+
+function Game:getStatus()
+    return self.status
+end
+
+function Game:startGame()
+    self.status = "playing"
 end
 
 function Game:getTurn()
