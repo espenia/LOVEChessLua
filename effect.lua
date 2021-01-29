@@ -12,7 +12,7 @@ function Effect:particle()
     self.effect:setSpeed(0.001)
     self.effect:setEmissionRate(0.00001)
     self.effect:setSpin(1, 2)
-    self.effect:setEmissionArea('uniform', 450, 0, 0, false)
+    self.effect:setEmissionArea('uniform', 4000, 0, 0, false)
     self.effect:setSizes(0.1, 0.1)
     for i = 0, 5000 do
         self.effect:update(1555)

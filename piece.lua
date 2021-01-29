@@ -3,9 +3,9 @@ Piece = Object:extend()
 require "square"
 
 function Piece:new(color, x, y, gridSize, xOffset, yOffset, posX, posY)
-    local imgGridRatio = 0.9 -- img has 90% width of grid width
+    self.ratio = 0.9 -- img has 90% width of grid width
     self.gridSize = gridSize
-    self.heightScale = gridSize * imgGridRatio / self.image:getHeight()
+    self.heightScale = gridSize * self.ratio / self.image:getHeight()
     self.widthScale = self.heightScale -- squared
     self.width = self.image:getWidth() * self.widthScale
     self.height = self.image:getHeight() * self.heightScale
@@ -60,11 +60,16 @@ function Piece:getChessPos()
     return x, y
 end
 
-function Piece:updatePositionOnResize(xOffset, yOffset, gridSize)
+function Piece:updateOnResize(xOffset, yOffset, gridSize)
     local x, y = self.actualPos:get()
+    local ratio = 0.9
     self.xOffset = xOffset
     self.yOffset = yOffset
     self.gridSize = gridSize
+    self.heightScale = gridSize * ratio / self.image:getHeight()
+    self.widthScale = self.heightScale
+    self.width = self.image:getWidth() * self.widthScale
+    self.height = self.image:getHeight() * self.heightScale
     self.x = x * gridSize + xOffset + (gridSize - self.width) / 2
     self.y = y * gridSize + yOffset + (gridSize - self.height) / 2
 end

@@ -90,5 +90,5 @@ function love.keypressed(key, u)
  end
 
 function love.resize(w, h)
-    board:updatePositionOnResize()
+    board:updateOnResize()
 end
