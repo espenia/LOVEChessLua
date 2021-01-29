@@ -71,7 +71,7 @@ function Menu:drawConfirmWindow()
         local font = love.graphics.getFont()
         local fontWidth = font:getWidth(request .. "?")
         local x = (love.graphics.getWidth() - fontWidth) / 2
-        local y = love.graphics.getWidth() / 3
+        local y = love.graphics.getHeight() / 2 - font:getHeight(request .. "?")
         love.graphics.print(request .. "?", x, y)
         love.graphics.setFont(love.graphics.newFont(self.confirmTextSize / 2))
         local font = love.graphics.getFont()
@@ -151,9 +151,9 @@ function Menu:optionRequested()
     return nil
 end
 
-function Menu:updateOnResize(gridSize, tiles)
-    self.x = (love.graphics.getWidth() + tiles * gridSize) / 2 + self.offset
-    self.y = love.graphics.getHeight() * 0.1
+function Menu:updateOnResize(x, y)
+    self.x = x
+    self.y = y
 end
 
 function Menu:getMenuEnd()
