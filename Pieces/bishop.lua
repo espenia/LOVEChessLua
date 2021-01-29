@@ -16,8 +16,9 @@ function Bishop:validateMovement(movement)
     xo,yo = movement:getStart()
     xf,yf = movement:getEnd()
     delta = xf-xo
-    if  (yo + delta == yf) or 
-        (yo - delta == yf) then
+    if  delta ~= 0 and
+        ((yo + delta == yf) or 
+        (yo - delta == yf)) then
         return true
     else
         return false
@@ -40,5 +41,9 @@ function Bishop:checkTrajectory(x, y, xf, yf, xo,yo)
         end
     end    
     return false
+    
+end
+
+function Bishop:getAllPossibleMovements()
     
 end

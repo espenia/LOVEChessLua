@@ -15,21 +15,57 @@ function love.load()
 end
 
 function love.update(dt)
-    board:update(dt)
+    board:update(dt, game:getTurn())
     if board:isNewMove() then
-        if game:validateMove(board:getPieces(), board:getMoved(), board:getLastMove(), board) then
-            game:nextTurn()
-            --board:removeCapturedPiece()
-            
+        local isValidMove = game:validateMove(board:getPieces(), board:getMoved(), board:getLastMove(), board)
+        if board:isNotWaitingForPromotion() and isValidMove then
+            local pawn = game:isPawnPromotion(board:getPieces(), game:getTurn())
+            if pawn then
+                board:spawnPromotionPieces(pawn)
+            else
+                game:nextTurn()
+            end
         else
             board:revertLastMove()
         end
+    end    
+    if board:isNewPromotion() then
+        game:nextTurn()     
     end
     ingameMenu:updateSelection()
 end
 
 function love.draw()
     game:showCurrentTurn(game:getTurn())
+
+    love.graphics.print(board:getMoved(), 10, 100)
+    love.graphics.print(#board:getPieces(), 10, 150)
+
+    -- local king = board:getKing("w")
+    -- if king == nil then
+    --     love.graphics.print("bum bum the white king is dead", 10, 100)
+    -- else
+    --     love.graphics.print("white king alive", 10, 100)
+    -- end
+    -- if  game:isKingInCheck(king, board:getPieces()) then
+    --     love.graphics.print("white king is in check", 10, 200)
+    -- else
+    --     love.graphics.print("white king is not in check", 10 , 200)
+    -- end
+
+    -- king = board:getKing("b")
+    -- if king == nil then
+    --     love.graphics.print("bum bum the black king is dead", 10, 400)
+    -- else
+    --     love.graphics.print("black king alive", 10, 400)
+    -- end
+    -- if  game:isKingInCheck(king, board:getPieces()) then
+    --     love.graphics.print("black king is in check", 10, 300)
+    -- else
+    --     love.graphics.print("black king is not in check", 10 , 300)
+    -- end
+
+
     board:draw()
     ingameMenu:draw()
 end

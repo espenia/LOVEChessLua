@@ -18,15 +18,15 @@ end
 function Rook:validateMovement(movement)
     xo,yo = movement:getStart()
     xf,yf = movement:getEnd()
-    if  (xo == xf) or 
-        (yo == yf) then
+    if  (xo == xf and yo ~= yf and xo ~= nil) or 
+        (yo == yf and xo ~= xf and yo ~= nil) then
         return true
     else
         return false
     end
 end 
 
-function Rook:checkTrajectory( x, y, xf, yf, xo,yo)
+function Rook:checkTrajectory(x, y, xf, yf, xo, yo)
 
     if  (yo < y and y < yf and x == xo) or
         (xo < x and x < xf and y == yo) or
@@ -35,5 +35,29 @@ function Rook:checkTrajectory( x, y, xf, yf, xo,yo)
         return true
     else
         return false
+    end
+end
+
+function Rook:checkRookCasteling(side)
+    local actualXPos, actualYPos = self.actualPos:get()
+
+    if self.color == "w" and self.firstMove == true then
+        if side == 1 and actualXPos == 7 and actualYPos == 0 then
+            return 4,0,true 
+        elseif side == -1 and actualXPos == 0 and actualYPos == 0 then
+            return 2,0,true
+        else
+            return 0,0,false
+        end
+    elseif self.color == "b" and self.firstMove == true then
+        if side == 1 and actualXPos == 7 and actualYPos == 7 then
+            return 4,7,true
+        elseif side == -1 and actualXPos == 0 and actualYPos == 7 then
+            return 2,7,true
+        else
+            return 0,0,false
+        end
+    else
+        return 0,0,false
     end
 end
