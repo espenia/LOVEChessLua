@@ -66,7 +66,7 @@ function Menu:drawConfirmWindow()
     if self.confirmPopped then
         self:drawBackgroundConfirmWindow()
         local request = self.options[self.currentSelected]
-        local myFont = love.graphics.getFont( )
+        local myFont = love.graphics.getFont()
         love.graphics.setFont(love.graphics.newFont(self.confirmTextSize))
         local font = love.graphics.getFont()
         local fontWidth = font:getWidth(request .. "?")

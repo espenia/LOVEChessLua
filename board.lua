@@ -149,6 +149,8 @@ function Board:draw()
 end
 
 function Board:drawBackground()
+    local r, g, b, a = love.graphics.getColor()
+    love.graphics.setColor(1, 1, 1, 0.95)
     local scale, xPos, yPos = self.imageScale, 0, 0
     for i = 1, self.tiles / 2 do
         for j = 1, self.tiles do
@@ -159,6 +161,7 @@ function Board:drawBackground()
             love.graphics.draw(self.imageLight, xPos, yPos, 0, scale, scale)
         end
     end
+    love.graphics.setColor(r, g, b, a)
 end
 
 function Board:classicStart()
