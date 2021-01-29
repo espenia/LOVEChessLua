@@ -28,13 +28,13 @@ function Board:new()
     self.newPromotion = false
 end
 
-function Board:updatePositionOnResize()
+function Board:updateOnResize()
     self.gridSize = love.graphics.getHeight() * 0.8 / self.tiles
     self.imageScale = self.gridSize / self.imageDark:getWidth()
     self.xOffset = (love.graphics.getWidth() - self.gridSize * self.tiles) / 2
     self.yOffset = (love.graphics.getHeight() - self.gridSize * self.tiles) / 2
     for key, piece in pairs(pieces) do
-        piece:updatePositionOnResize(self.xOffset, self.yOffset, self.gridSize)
+        piece:updateOnResize(self.xOffset, self.yOffset, self.gridSize)
     end
 end
 
@@ -161,7 +161,7 @@ end
 
 function Board:drawBackground()
     local r, g, b, a = love.graphics.getColor()
-    love.graphics.setColor(1, 1, 1, 0.95)
+    love.graphics.setColor(1, 1, 1, 0.90)
     local scale, xPos, yPos = self.imageScale, 0, 0
     for i = 1, self.tiles / 2 do
         for j = 1, self.tiles do
