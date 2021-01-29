@@ -13,7 +13,7 @@ end
 function love.update(dt)
     board:update(dt)
     if board:isNewMove() then
-        if game:validateMove(board:getPieces(), board:getMoved(), board:getLastMove(), board) then
+        if game:validateMove(board) then
             game:nextTurn()
         else
             board:revertLastMove()
