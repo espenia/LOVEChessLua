@@ -62,10 +62,10 @@ function Board:updateAll()
 end
 
 function Board:updateAllPromotion()
-    for i = 1, #self.promotionPieces do
-        self.promotionPieces[i]:update()
-        if self.promotionPieces[i].clicked then
-            self.pressedPromotion = i
+    for key, piece in pairs(self.promotionPieces) do
+        piece:update()
+        if piece.clicked then
+            self.pressedPromotion = key
             break
         end
     end
