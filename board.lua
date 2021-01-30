@@ -10,9 +10,10 @@ require "move"
 Board = Object:extend()
 
 function Board:new()
-    self.xOffset = 128
-    self.yOffset = self.xOffset / 4
     self.gridSize = 67
+    self.tiles = 8 --board squares
+    self.xOffset = (love.graphics.getWidth() - self.gridSize * self.tiles) / 2
+    self.yOffset = (love.graphics.getHeight() - self.gridSize * self.tiles) / 2
     self.pieces = {}
     self:classicStart()
     self.pressed = -1 --index of pressed piece. -1 == none pressed
@@ -85,7 +86,7 @@ function Board:updatePromotionSelection(turn)
     if promotionSelected ~= nil then
         for key, piece in pairs(self.pieces) do
             local x, y = piece:getActualPos()
-            if piece:getName() == "pawn" and (y == 7 or y == 0) then
+            if piece:getName() == "pawn" and (y == self.tiles - 1 or y == 0) then
                 self.pieces[key] = self:promotePawn(promotionSelected, piece)
             end
         end
@@ -105,9 +106,9 @@ function Board:spawnPromotionPieces(pawn)
     local step = self.gridSize
     local xOffset = self.xOffset
     local yOffset = self.yOffset
-    local boardEnd = 8 * self.gridSize
+    local boardEnd = self.tiles * self.gridSize
     local knight, bishop, rook, queen
-    self.promotionPieces = {}
+    --self.promotionPieces = {}
     if pawn:getColor() == "w" then
         knight = Knight(pawn:getColor(), boardEnd, boardEnd - step, step, xOffset, yOffset, 8, j)
         bishop = Bishop(pawn:getColor(),  boardEnd , boardEnd - 2 * step, step, xOffset, yOffset, 8, j + 1)
@@ -150,8 +151,8 @@ end
 
 function Board:drawBackground()
     local scale, xPos, yPos = self.imageScale, 0, 0
-    for i = 1, 4 do
-        for j = 1,8 do
+    for i = 1, self.tiles / 2 do
+        for j = 1, self.tiles do
             xPos = (2 * i - 2 + j % 2) * self.gridSize + self.xOffset
             yPos = (j - 1) * self.gridSize + self.yOffset
             love.graphics.draw(self.imageDark, xPos, yPos, 0, scale, scale)
@@ -170,7 +171,7 @@ function Board:whitePiecesDefault(pieces)
     local step = self.gridSize
     local xOffset = self.xOffset
     local yOffset = self.yOffset
-    local boardEnd = 8 * self.gridSize
+    local boardEnd = self.tiles * self.gridSize
 
     self:addPiece(Knight("w", step, 0, step, xOffset, yOffset, 1, 0))
     self:addPiece(Knight("w", boardEnd - 2 *step, 0, step, xOffset, yOffset, 6, 0))
@@ -180,7 +181,7 @@ function Board:whitePiecesDefault(pieces)
     self:addPiece(Rook("w", boardEnd - step, 0, step, xOffset, yOffset, 7, 0))
     self:addPiece(Queen("w", boardEnd - 4  * step, 0, step, xOffset, yOffset, 4, 0))
     self:addPiece(King("w", 3 * step, 0, step, xOffset, yOffset, 3, 0))
-    for i = 0, 7 do
+    for i = 0, self.tiles - 1 do
         self:addPiece(Pawn("w", i * step, step, step, xOffset, yOffset, i, 1))
     end
 end
@@ -189,7 +190,7 @@ function Board:blackPiecesDefault(pieces)
     local step = self.gridSize
     local xOffset = self.xOffset
     local yOffset = self.yOffset
-    local boardEnd = 8 * self.gridSize
+    local boardEnd = self.tiles * self.gridSize
 
     self:addPiece(Knight("b", step, boardEnd - step, step, xOffset, yOffset, 1, 7))
     self:addPiece(Knight("b", boardEnd - 2 *step, boardEnd - step, step, xOffset, yOffset, 6, 7))
@@ -199,7 +200,7 @@ function Board:blackPiecesDefault(pieces)
     self:addPiece(Rook("b",  boardEnd - step, boardEnd - step, step, xOffset, yOffset, 7, 7))
     self:addPiece(Queen("b", boardEnd - 4  * step  , boardEnd - step, step, xOffset, yOffset, 4, 7))
     self:addPiece(King("b", 3 * step , boardEnd - step, step, xOffset, yOffset, 3, 7))
-    for i = 0, 7 do
+    for i = 0, self.tiles - 1 do
         self:addPiece(Pawn("b", i * step,  boardEnd - 2 * step , step, xOffset, yOffset, i , 6))
     end
 end

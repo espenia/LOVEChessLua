@@ -47,17 +47,18 @@ end
 
 function King:checkTrajectory( x, y, xf, yf, xo,yo)
     if self.castlingInProcess == true then
-        if  (xo < x and x < xf and y == yo) or
-            (xf < x and x < xo and y == yo) then
+        if  (xo < x and x <= xf and y == yo) or
+            (xf <= x and x < xo and y == yo) then
+            self.castlingInProcess = false
             return true
-        else
+        else          
             return false
         end
     end
+    return false
 end
 
 function King:checkPossibleCasteling(pieces, board)
-    
     if self.castlingInProcess == true then
         for key, piece in pairs(pieces) do
             if piece:getName() == "rook" and piece:getColor() == self.color then
@@ -74,10 +75,13 @@ function King:checkPossibleCasteling(pieces, board)
                     piece:move(x,y)
                     self.castlingInProcess = false
                     return true   
-                end    
+                end
             end
         end
+    else
+    
+        return true
     end
     self.castlingInProcess = false
-    return true
+    return false
 end

@@ -17,22 +17,27 @@ end
 function Pawn:validateMovement(movement)
     local xo,yo = movement:getStart()
     local xf,yf = movement:getEnd()
+    self:setCanBeEnPassant(false)
 
     if  not self.firstMove and
         (xo == xf) and
         ((yf - yo == 1 and self.color == 'w') or
         (yf - yo == -1 and self.color == 'b')) then
+            print("not firstmove")
+            --self:setCanBeEnPassant(false)
         return true
     elseif  self.firstMove and
             (xo == xf) and
             (((yf - yo == 2) and self.color == 'w') or
             ((yf - yo == -2) and self.color == 'b')) then
+                print("can be en passant")
         self.canBeEnPassant = true
         return true
     elseif  self.firstMove and
             (xo == xf) and
             (((yf - yo == 1 or yf - yo == 2) and self.color == 'w') or
             ((yf - yo == -1 or yf - yo == -2) and self.color == 'b')) then
+                print("first move")
         return true
     else
         return false
@@ -53,7 +58,9 @@ function Pawn:canCapture(movement, pieceToCapture)
         (xf - xo == 1 or xf - xo == -1) and
         ((yf - yo == 1 and self.color == 'w') or
         (yf - yo == -1 and self.color == 'b')) then
+            print("seteo en passant true")
             pieceToCapture:setEnPassant(true)
+            --pieceToCapture:setCanBeEnPassant(false)
         return true
     end
 

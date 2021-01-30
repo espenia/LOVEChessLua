@@ -22,7 +22,16 @@ function Game:validateMove(board)
         if  self:checkMovement(pieces, pieces[pressed]:getColor(), lastMove, pressed) then
             if not self:isKingInCheck(king, pieces) then
                 local capturedPiece = self:checkPieceToBeCaptured(pieces, lastMove, pressed)
+                if pieces[pressed]:checkPossibleCasteling(pieces, board) == false  then
+                    print("checkPosCast")
+                    return false
+                end
                 pieces[pressed]:updatePos(lastMove)
+                print("if1")
+                if capturedPiece then
+                    self:resetCapturedFlags(pieces)
+                end
+                --self:resetCapturedFlags(pieces)
                 if self:isKingInCheck(king, pieces) then
                     self:resetCapturedFlags(pieces)
                     return false
@@ -34,9 +43,10 @@ function Game:validateMove(board)
                         board:removeCapturedPiece(capturedPiece)
                         self:resetCapturedFlags(pieces)
                     end
-                    if pieces[pressed]:checkPossibleCasteling(pieces, board) == false then
-                        return false
-                    end
+                    print("if2")
+                    --if pieces[pressed]:checkPossibleCasteling(pieces, board) == false then
+                    --    return false
+                    --end
                     return true
                 end
                 
@@ -169,6 +179,7 @@ end
 
 function Game:resetCapturedFlags(pieces)
     print(pieces)
+    print("reseted")
     for key, piece in pairs(pieces) do
         if  piece then
             piece:toBeCaptured(false)
@@ -180,9 +191,9 @@ end
 
 function Game:showCurrentTurn(current)
     if current == "w" then
-        love.graphics.print("Current Turn: White", 670, 50)
+        love.graphics.print("Turn: White", 695, 50)
     else
-        love.graphics.print("Current Turn: Black", 670, 50)
+        love.graphics.print("Turn: Black", 695, 50)
     end
 end
 
