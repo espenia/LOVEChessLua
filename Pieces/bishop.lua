@@ -16,17 +16,12 @@ function Bishop:validateMovement(movement)
     xo,yo = movement:getStart()
     xf,yf = movement:getEnd()
     delta = xf-xo
-    print(delta)
-    print(delta)
-    print(xo,yo)
-    print(xf,yf)
+
     if  delta ~= 0 and
         ((yo + delta == yf) or 
         (yo - delta == yf)) then
-            print("trueeee")
         return true
     else
-        print("falseeee")
         return false
     end
 end 

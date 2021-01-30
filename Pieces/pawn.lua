@@ -46,12 +46,6 @@ function Pawn:canCapture(movement, pieceToCapture)
 
     local y,z = pieceToCapture:getActualPos()
 
-    print(pieceToCapture:getName())
-    print(xo, yo)
-    print(xf, yf)
-    print(y,z)
-    print(self.color)
-
     if  pieceToCapture:getName() == 'pawn' and
         pieceToCapture:getCanBeEnPassant() and
         (z == yo) and
@@ -66,6 +60,7 @@ function Pawn:canCapture(movement, pieceToCapture)
     end
 
     if  pieceToCapture:checkCoordinates(xf, yf) and
+        self.color ~= pieceToCapture:getColor() and
         (xf - xo == 1 or xf - xo == -1) and
         ((yf - yo == 1 and self.color == 'w') or
         (yf - yo == -1 and self.color == 'b')) then
