@@ -11,18 +11,30 @@ function love.load()
 end
 
 function love.update(dt)
-    board:update(dt)
+    board:update(dt, game:getTurn())
     if board:isNewMove() then
-        if game:validateMove(board) then
-            game:nextTurn()
+        local isValidMove = game:validateMove(board)
+        if board:isNotWaitingForPromotion() and isValidMove then
+            local pawn = game:isPawnPromotion(board:getPieces(), game:getTurn())
+            if pawn then
+                board:spawnPromotionPieces(pawn)
+            else
+                game:nextTurn()
+            end
         else
             board:revertLastMove()
         end
+    end    
+    if board:isNewPromotion() then
+        game:nextTurn()     
     end
 end
 
 function love.draw()
     game:showCurrentTurn(game:getTurn())
+
+    love.graphics.print(board:getMoved(), 10, 100)
+    love.graphics.print(#board:getPieces(), 10, 150)
 
     -- local king = board:getKing("w")
     -- if king == nil then

@@ -2,7 +2,6 @@ Game = Object:extend()
 
 function Game:new()
     self.turn = "w"
-    self.checkstatus = "no"
 end
 
 function Game:getTurn()
@@ -18,31 +17,37 @@ function Game:validateMove(board)
     local pressed = board:getMoved()
     local lastMove = board:getLastMove()
 
-    if pieces[pressed]:getColor() ==  self.turn then
+    if pieces[pressed]:getColor() == self.turn then
         local king = board:getKing(self.turn)
         if  self:checkMovement(pieces, pieces[pressed]:getColor(), lastMove, pressed) then
             if not self:isKingInCheck(king, pieces) then
                 local capturedPiece = self:checkPieceToBeCaptured(pieces, lastMove, pressed)
                 pieces[pressed]:updatePos(lastMove)
                 if self:isKingInCheck(king, pieces) then
-                    self:resetCapturedFlags()
+                    self:resetCapturedFlags(pieces)
                     return false
                 else
+                    print(pieces)
+                    print(pressed)
+                    print(pieces[pressed])
                     if capturedPiece then
                         board:removeCapturedPiece(capturedPiece)
-                        self:resetCapturedFlags()
+                        self:resetCapturedFlags(pieces)
+                    end
+                    if pieces[pressed]:checkPossibleCasteling(pieces, board) == false then
+                        return false
                     end
                     return true
                 end
                 
             else
                 local capturedPiece = self:checkPieceToBeCaptured(pieces, lastMove, pressed)
+                pieces[pressed]:updatePos(lastMove)
                 if capturedPiece then
                     board:removeCapturedPiece(capturedPiece)
-                    self:resetCapturedFlags()
+                    self:resetCapturedFlags(pieces)
                 end
                 --pieces = board:getPieces()
-                pieces[pressed]:updatePos(lastMove)
                 if self:isKingInCheck(king, pieces) then
                     if capturedPiece then
                         board:addPiece(capturedPiece)
@@ -88,7 +93,6 @@ function Game:checkMovement(pieces, color, movement, pressed)
                     pressed ~= key then
                     return false
                 end
-
                 if  piece:checkCoordinates(xf, yf) and
                     not pieces[pressed]:canCapture(movement, piece) and
                     pressed ~= key then
@@ -163,7 +167,8 @@ function Game:canPieceCapture(pressed, otherPiece, pieces)
     return false
 end
 
-function Game:resetCapturedFlags()
+function Game:resetCapturedFlags(pieces)
+    print(pieces)
     for key, piece in pairs(pieces) do
         if  piece then
             piece:toBeCaptured(false)
@@ -181,3 +186,16 @@ function Game:showCurrentTurn(current)
     end
 end
 
+function Game:isPawnPromotion(pieces , color)
+    for key, piece in pairs(pieces) do
+        local x,y = piece:getActualPos()
+        if piece:getColor() == "w" and piece:getColor() == color 
+        and y == 7 and piece:getName() == "pawn" then
+            return piece
+        elseif piece:getColor() == "b" and piece:getColor() == color
+        and y == 0 and piece:getName() == "pawn" then
+            return piece
+        end
+    end
+    return false
+end

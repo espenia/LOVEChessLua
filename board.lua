@@ -13,7 +13,8 @@ function Board:new()
     self.xOffset = 128
     self.yOffset = self.xOffset / 4
     self.gridSize = 67
-    self.pieces = self:classicStart()
+    self.pieces = {}
+    self:classicStart()
     self.pressed = -1 --index of pressed piece. -1 == none pressed
     self.moved = -1 --index of last moved piece
     self.imageDark = love.graphics.newImage("assets/square-brown-dark.png")
@@ -21,15 +22,19 @@ function Board:new()
     self.imageScale = self.gridSize / self.imageDark:getWidth()
     self.lastMove = Move()
     self.newMove = false
+    self.promotionPieces = {}
+    self.pressedPromotion = -1
+    self.newPromotion = false
 end
 
-function Board:update(dt)
+function Board:update(dt, turn)
     if self.pressed ~= -1 then
         self:updatePressed()
     end
     if self.pressed == -1 then
         self:updateAll()
     end
+    self:updatePromotionSelection(turn)
 end
 
 function Board:updatePressed()
@@ -55,6 +60,71 @@ function Board:updateAll()
     end
 end
 
+function Board:updateAllPromotion()
+    for i = 1, #self.promotionPieces do
+        self.promotionPieces[i]:update()
+        if self.promotionPieces[i].clicked then
+            self.pressedPromotion = i
+            break
+        end
+    end
+end
+
+function Board:isNewPromotion()
+    return self.newPromotion
+end
+
+function Board:isNotWaitingForPromotion()
+    return self.promotionPieces == nil or next(self.promotionPieces) == nil
+end
+
+function Board:updatePromotionSelection(turn)
+    self.newPromotion = false
+    self:updateAllPromotion()
+    local promotionSelected = self.promotionPieces[self.pressedPromotion]
+    if promotionSelected ~= nil then
+        for key, piece in pairs(self.pieces) do
+            local x, y = piece:getActualPos()
+            if piece:getName() == "pawn" and (y == 7 or y == 0) then
+                self.pieces[key] = self:promotePawn(promotionSelected, piece)
+            end
+        end
+    end
+end
+
+function Board:promotePawn(promotionSelected, pawn)
+    local newPiece = pawn:promotion(promotionSelected:getName())
+    self.newPromotion = true
+    self.promotionPieces = {}
+    self.pressedPromotion = -1
+    return newPiece
+end
+
+function Board:spawnPromotionPieces(pawn)
+    local i,j = pawn:getActualPos()
+    local step = self.gridSize
+    local xOffset = self.xOffset
+    local yOffset = self.yOffset
+    local boardEnd = 8 * self.gridSize
+    local knight, bishop, rook, queen
+    self.promotionPieces = {}
+    if pawn:getColor() == "w" then
+        knight = Knight(pawn:getColor(), boardEnd, boardEnd - step, step, xOffset, yOffset, 8, j)
+        bishop = Bishop(pawn:getColor(),  boardEnd , boardEnd - 2 * step, step, xOffset, yOffset, 8, j + 1)
+        rook = Rook(pawn:getColor(),  boardEnd , boardEnd - 3 * step, step, xOffset, yOffset, 8, j + 3)
+        queen = Queen(pawn:getColor(), boardEnd, boardEnd - 4 * step, step, xOffset, yOffset, 8, j + 3)
+    else
+        knight = Knight(pawn:getColor(), -step, 0, step, xOffset, yOffset, 8, j)
+        bishop = Bishop(pawn:getColor(), -step , step, step, xOffset, yOffset, 8, j + 1)
+        rook = Rook(pawn:getColor(), -step, 2 * step, step, xOffset, yOffset, 8, j + 3)
+        queen = Queen(pawn:getColor(), -step, 3 * step, step, xOffset, yOffset, 8, j + 3)
+    end
+    table.insert(self.promotionPieces, knight)
+    table.insert(self.promotionPieces, bishop)
+    table.insert(self.promotionPieces, rook)
+    table.insert(self.promotionPieces, queen)
+end
+
 function Board:draw()
     self:drawBackground()
     for i = 1, #self.pieces do
@@ -62,6 +132,13 @@ function Board:draw()
             self.pieces[i]:draw()
         end
     end
+
+    for i = 1, #self.promotionPieces do
+        if self.pressed ~= i then
+            self.promotionPieces[i]:draw()
+        end
+    end
+
     -- draws pressed piece on top
     if self.pressed ~= -1 then
         self.pieces[self.pressed]:draw()
@@ -85,10 +162,8 @@ function Board:drawBackground()
 end
 
 function Board:classicStart()
-    pieces = {}
-    self:whitePiecesDefault(pieces)
-    self:blackPiecesDefault(pieces)
-    return pieces
+    self:whitePiecesDefault(self.pieces)
+    self:blackPiecesDefault(self.pieces)
 end
 
 function Board:whitePiecesDefault(pieces)
@@ -134,7 +209,7 @@ function Board:getLastMove()
 end
 
 function Board:addPiece(piece)
-    table.insert(pieces, piece)
+    table.insert(self.pieces, piece)
 end
 
 function Board:getPieces()
@@ -148,7 +223,7 @@ function Board:revertLastMove()
 end
 
 function Board:removeCapturedPiece(piece)
-    index = self:getIndexFrom(piece, self:getPieces())
+    local index = self:getIndexFrom(piece, self:getPieces())
     table.remove(self:getPieces(), index)
 end
 
@@ -156,9 +231,8 @@ function Board:isNewMove()
     if self.newMove then
         self.newMove = false
         return true
-    else
-        return false
     end
+    return false
 end
 
 function Board:getMoved()

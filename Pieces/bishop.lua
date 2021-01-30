@@ -43,3 +43,7 @@ function Bishop:checkTrajectory(x, y, xf, yf, xo,yo)
     return false
     
 end
+
+function Bishop:getAllPossibleMovements()
+    
+end
