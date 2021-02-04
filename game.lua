@@ -90,10 +90,10 @@ end
 
 
 function Game:nextTurn()
-    if game:getTurn() == "w" then
-        game:setTurn("b")
+    if self:getTurn() == "w" then
+        self:setTurn("b")
     else
-        game:setTurn("w")
+        self:setTurn("w")
     end
 end
 
