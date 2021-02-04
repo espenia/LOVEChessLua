@@ -32,7 +32,7 @@ function love.update(dt)
     if game:getStatus() == "playing" then
         board:update(dt, game:getTurn())
         if board:isNewMove() then
-            local isValidMove = game:validateMove(board:getLastMove(), board)
+            local isValidMove = game:validateMove(board)
             if board:isNotWaitingForPromotion() and isValidMove then
                 local pawn = game:isPawnPromotion(board:getPieces(), game:getTurn())
                 if pawn then

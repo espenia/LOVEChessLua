@@ -33,7 +33,7 @@ function Board:updateOnResize(windowFactor)
     self.imageScale = self.gridSize / self.imageDark:getWidth()
     self.xOffset = (love.graphics.getWidth() - self.gridSize * self.tiles) / 2
     self.yOffset = (love.graphics.getHeight() - self.gridSize * self.tiles) / 2
-    for key, piece in pairs(pieces) do
+    for key, piece in pairs(self.pieces) do
         piece:updateOnResize(self.xOffset, self.yOffset, self.gridSize)
     end
 end
