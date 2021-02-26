@@ -2,10 +2,10 @@ Piece = Object:extend()
 
 require "square"
 
-function Piece:new(color, x, y, gridSize, xOffset, yOffset)
-    local imgGridRatio = 0.9 -- img has 90% width of grid width
+function Piece:new(color, x, y, gridSize, xOffset, yOffset, posX, posY)
+    self.ratio = 0.9 -- img has 90% width of grid width
     self.gridSize = gridSize
-    self.heightScale = gridSize * imgGridRatio / self.image:getHeight()
+    self.heightScale = gridSize * self.ratio / self.image:getHeight()
     self.widthScale = self.heightScale -- squared
     self.width = self.image:getWidth() * self.widthScale
     self.height = self.image:getHeight() * self.heightScale
@@ -13,15 +13,40 @@ function Piece:new(color, x, y, gridSize, xOffset, yOffset)
     self.yOffset = yOffset
     self.x = x + self.xOffset + (self.gridSize - self.width) / 2
     self.y = y + self.yOffset + (self.gridSize - self.height) / 2
-    self.speed = 500
     self.clicked = false
     self.color = color
     self.drawOffset = 5
+    self.actualPos = Square()
+    self.actualPos:set(posX, posY)
+    self.captured = false
+    self.firstMove = true
+    self.castlingInProcess = false
 end
 
-function Piece:move(x, y)
-    self.x = x * self.gridSize + self.xOffset + (self.gridSize - self.width) / 2
-    self.y = y * self.gridSize + self.yOffset + (self.gridSize - self.height) / 2
+function Piece:getColor()
+    return self.color
+end
+
+function Piece:toBeCaptured(toBeCaptured)
+    self.captured = toBeCaptured
+end
+
+function Piece:isCaptured()
+    return self.captured
+end
+
+-- function Piece:setColor(i)
+--     if i == 0 then
+--         self.color = "w"
+--     else
+--         self.color = "b"
+--     end
+-- end
+
+function Piece:move(xd, yd)
+    self.x = xd * self.gridSize + self.xOffset + (self.gridSize - self.width) / 2
+    self.y = yd * self.gridSize + self.yOffset + (self.gridSize - self.height) / 2
+    self.actualPos:set(xd,yd)
 end
 
 function Piece:update(dt)
@@ -32,7 +57,21 @@ end
 function Piece:getChessPos()
     local x = math.floor((self.x - self.xOffset) / self.gridSize)
     local y = math.floor((self.y - self.yOffset) / self.gridSize)
-    return x,y
+    return x, y
+end
+
+function Piece:updateOnResize(xOffset, yOffset, gridSize)
+    local x, y = self.actualPos:get()
+    local ratio = 0.9
+    self.xOffset = xOffset
+    self.yOffset = yOffset
+    self.gridSize = gridSize
+    self.heightScale = gridSize * ratio / self.image:getHeight()
+    self.widthScale = self.heightScale
+    self.width = self.image:getWidth() * self.widthScale
+    self.height = self.image:getHeight() * self.heightScale
+    self.x = x * gridSize + xOffset + (gridSize - self.width) / 2
+    self.y = y * gridSize + yOffset + (gridSize - self.height) / 2
 end
 
 function Piece:getName()
@@ -53,8 +92,9 @@ function Piece:draw()
     love.graphics.draw(self.image, self.x, self.y - lift, 0, self.widthScale, self.heightScale)
 end
 
+
 function Piece:isPressed()
-    local delta = 50
+    local delta = self.gridSize / 3.3
     if love.mouse.isDown(1) then
         local x, y = love.mouse.getPosition()
         if  (x > self.x + self.width / 2 - delta) and
@@ -72,12 +112,12 @@ function Piece:drag()
     local x,y = 0,0
     if self.clicked then
         x, y = love.mouse.getPosition()
-        if self:mouseOnBoard(x, y) then
+        --if self:mouseOnBoard(x, y) then
             x = math.floor((x - self.xOffset) / self.gridSize) * self.gridSize
             self.x = x + self.xOffset + (self.gridSize - self.width) / 2
             y = math.floor((y - self.yOffset) / self.gridSize) * self.gridSize
             self.y = y + self.yOffset + (self.gridSize - self.height) / 2
-        end
+        --end
     end
 end
 
@@ -93,4 +133,54 @@ function Piece:setColor(i)
     else
         self.color = "b"
     end
+end
+
+function Piece:updatePos(lastMove)
+    xf,yf = lastMove:getEnd()
+    self.actualPos:set(xf,yf)
+    self.firstMove = false
+end
+
+function Piece:getColor()
+    return self.color
+end
+
+function Piece:checkPos(colorf, xf, yf)
+    myX, myY = self.actualPos:get();
+
+    if myX == xf and myY == yf and self.color == colorf then
+        return true
+    else
+        return false
+    end
+end
+
+function Piece:checkCoordinates(xf, yf)
+    myX, myY = self.actualPos:get();
+
+    if myX == xf and myY == yf then
+        return true
+    else
+        return false
+    end
+end
+
+function Piece:getActualPos()
+    return self.actualPos:get()
+end
+
+function Piece:canCapture(movement)
+    return self:validateMovement(movement)
+end
+
+function Piece:getCastlingInProcess()
+    return self.castlingInProcess
+end
+
+function Piece:setClicked()
+    self.clicked = true
+end
+
+function Piece:checkPossibleCasteling(pieces, pressed, size)
+    return true
 end
